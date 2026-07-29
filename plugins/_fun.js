@@ -4,7 +4,6 @@ let handler = async (m, { conn, command, text }) => {
     let metadata = await conn.groupMetadata(m.chat)
     let users = metadata.participants.map(u => u.id)
     let porcentaje = Math.floor(Math.random() * 101)
-    let args = text.split(' ') // SACAMOS ARGS DEL TEXT
 
     const BOX_TOP = `⚡━━━━━━━━━━━━━━━⚡`
     const BOX_BOT = `⚡━━━━━━━━━━━━━━━⚡`
@@ -22,17 +21,31 @@ let handler = async (m, { conn, command, text }) => {
         return '@' + jid.split('@')[0]
     }
 
+    // FIX: BUSCAR EL JID POR NOMBRE ESCRITO
+    function findUserByName(name) {
+        name = name.toLowerCase().replace('@','')
+        return users.find(u => {
+            let num = u.split('@')[0].toLowerCase()
+            return num.includes(name)
+        })
+    }
+
     let txt = ''
     let mentions = []
 
-    // AGARRA TAG O REPLY. SI NO HAY NADA = ERROR
-    let target = m.mentionedJid[0] || m.quoted?.sender || null
+    // 1. TAG REAL 2. REPLY 3. BUSCAR POR TEXTO
+    let target = m.mentionedJid[0] || m.quoted?.sender
+    if(!target && text) {
+        let possibleName = text.split(' ')[0] // agarra la primera palabra despues del comando
+        target = findUserByName(possibleName)
+    }
 
-    let cmd = command.toLowerCase()
+    if(!target) return m.reply(`⚡ *USO:*.${command} @tag\n*Ejemplo:*.${command} @Juan\n*O:* Responde a alguien +.${command}`)
+
+    let cmd = command.toLowerCase().replace(' ','') // quita espacios
 
     switch(cmd) {
-        case 'miamor': case 'miamor': case 'mi amor':
-            if(!target) return m.reply(`⚡ *USO:*.miamor @tag\n*O:* Responde a alguien +.miamor`)
+        case 'miamor':
             mentions = [target]
             txt = `${BOX_TOP}
 😈 𝙰𝙼𝙾𝚁 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 😈
@@ -46,7 +59,6 @@ ${BOX_BOT}`
             break
 
         case 'mibebito':
-            if(!target) return m.reply(`⚡ *USO:*.mibebito @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 🍼 𝙵𝙸𝚄 𝙵𝙸𝚄 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 🍼
@@ -58,7 +70,6 @@ ${BOX_BOT}`
             break
 
         case 'bratz':
-            if(!target) return m.reply(`⚡ *USO:*.bratz @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 💄 𝙱𝚁𝙰𝚃𝚉 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙰 💄
@@ -70,7 +81,6 @@ ${BOX_BOT}`
             break
 
         case 'bellaka':
-            if(!target) return m.reply(`⚡ *USO:*.bellaka @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 💃 𝙱𝙴𝙻𝙰𝙺𝙰 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙰 💃
@@ -82,7 +92,6 @@ ${BOX_BOT}`
             break
 
         case 'brother':
-            if(!target) return m.reply(`⚡ *USO:*.brother @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 👬 𝙵𝚁𝙰𝚂𝙴 𝙿𝙸𝚃𝚄𝙵𝙾 👬
@@ -93,8 +102,7 @@ ${BOX_BOT}
 ${BOX_BOT}`
             break
 
-        case 'perroinfiel': case 'perroinfiel': case 'perro infiel':
-            if(!target) return m.reply(`⚡ *USO:*.perroinfiel @tag`)
+        case 'perroinfiel':
             mentions = [target]
             txt = `${BOX_TOP}
 🐕 𝙿𝙴𝚁𝙾 𝙸𝙽𝙵𝙸𝙴𝙻 🐕
@@ -106,8 +114,7 @@ ${BOX_BOT}
 ${BOX_BOT}`
             break
 
-        case 'mentiroso': case 'mentiroso': case 'mentiras':
-            if(!target) return m.reply(`⚡ *USO:*.mentiroso @tag`)
+        case 'mentiroso': case 'mentiras':
             mentions = [target]
             txt = `${BOX_TOP}
 🤥 𝙼𝙴𝙽𝚃𝙸𝚁𝙾𝚂𝙾 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 🤥
