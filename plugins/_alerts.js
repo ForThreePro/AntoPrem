@@ -30,13 +30,13 @@ handler.before = async function (m, { conn }) {
         }
     }
 
-    // SOLO FOTO DEL GRUPO > FOTO DEL USER > DEFAULT
+    // 1. FOTO DEL USER > 2. FOTO DEL GRUPO > 3. DEFAULT
     let banner;
     try {
-        banner = await conn.profilePictureUrl(m.chat, 'image')
+        banner = await conn.profilePictureUrl(userss, 'image')
     } catch {
         try {
-            banner = await conn.profilePictureUrl(userss, 'image')
+            banner = await conn.profilePictureUrl(m.chat, 'image')
         } catch {
             banner = 'https://i.imgur.com/2wzZ3eB.png'
         }
@@ -95,7 +95,7 @@ handler.before = async function (m, { conn }) {
         await conn.sendMessage(m.chat, {
             image: { url: banner },
             caption: admingp,
-         ...context
+       ...context
         }, { quoted: null })
         return
     }
@@ -105,7 +105,7 @@ handler.before = async function (m, { conn }) {
         await conn.sendMessage(m.chat, {
             image: { url: banner },
             caption: noadmingp,
-         ...context
+       ...context
         }, { quoted: null })
         return
     }
