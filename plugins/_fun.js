@@ -5,8 +5,8 @@ let handler = async (m, { conn, command, text }) => {
     let users = metadata.participants.map(u => u.id)
     let porcentaje = Math.floor(Math.random() * 101)
 
-    const BOX_TOP = `⚡━━━━━━━━━━━━━━━⚡`
-    const BOX_BOT = `⚡━━━━━━━━━━━━━━━⚡`
+    const BOX_TOP = `╔═══「 ⚡ 𝗖𝗬𝗕𝗘𝗥 𝗦𝗬𝗦𝗧𝗘𝗠 」═══╗`
+    const BOX_BOT = `╚═══「 𝗦𝗜𝗦𝗧𝗘𝗠𝗔 𝗔𝗖𝗧𝗜𝗩𝗢 」═══╝`
 
     const frasesDuo = ["Somos el duo perfecto 😎","Juntos somos un peligro ⚠️","El duo que rompe grupos 💥","Duo de chisme nivel dios ☕","Dinamita pura 🧨","El mejor duo del server 👑"]
     const frasesBro = ['"Oe mano pásame 5 soles"','"Ya pe no seas malo"','"Después te pago juro"','"Invítame una gaseosa"']
@@ -41,7 +41,13 @@ let handler = async (m, { conn, command, text }) => {
     }
 
     if(!target &&!['2p2','3p3','duo'].includes(command.toLowerCase()))
-        return m.reply(`⚡ *USO:*.${command} @tag\n*Ejemplo:*.${command} @Juan\n*O:* Responde a alguien +.${command}`)
+        return m.reply(`╔═══「 ⚠️ 𝗘𝗥𝗥𝗢𝗥 」═══╗
+║
+║ 𝗨𝗦𝗢 :.${command} @tag
+║ 𝗘𝗝𝗘𝗠𝗣𝗟𝗢 :.${command} @Juan
+║ 𝗔𝗟𝗧 : 𝗥𝗲𝘀𝗽𝗼𝗻𝗱𝗲 +.${command}
+║
+╚═══「 𝗖𝗬𝗕𝗘𝗥 𝗦𝗬𝗦𝗧𝗘𝗠 」═══╝`)
 
     let cmd = command.toLowerCase().replace(' ','') // quita espacios
 
@@ -50,46 +56,41 @@ let handler = async (m, { conn, command, text }) => {
         case 'miamor':
             mentions = [target]
             txt = `${BOX_TOP}
-😈 𝙰𝙼𝙾𝚁 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 😈
-${BOX_BOT}
-
-│ 💕 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)}
-│
-│ 𝙽𝙸𝚅𝙴𝙻 𝙳𝙴 𝙰𝙼𝙾𝚁: ${porcentaje}%
-│ 𝙳𝙸𝙰𝙶𝙽𝙾𝚂𝚃𝙸𝙲𝙾: ${porcentaje > 70? 'Almas gemelas' : porcentaje > 40? 'Hay química' : 'Frio como hielo'}
+║ 𝗠𝗢𝗗𝗨𝗟𝗢 : 𝗔𝗠𝗢𝗥 𝗗𝗘𝗧𝗘𝗖𝗧𝗔𝗗𝗢
+║
+║ 𝗧𝗔𝗥𝗚𝗘𝗧 : ${jidToTag(target)}
+║ 𝗡𝗜𝗩𝗘𝗟 : ${porcentaje}%
+║ 𝗗𝗜𝗔𝗚𝗡𝗢𝗦𝗧𝗜𝗖𝗢 : ${porcentaje > 70? '𝗔𝗹𝗺𝗮𝘀 𝗚𝗲𝗺𝗲𝗹𝗮𝘀' : porcentaje > 40? '𝗛𝗮𝘆 𝗤𝘂𝗶𝗺𝗶𝗰𝗮' : '𝗙𝗿𝗶𝗼 𝗖𝗼𝗺𝗼 𝗛𝗶𝗲𝗹𝗼'}
 ${BOX_BOT}`
             break
 
         case 'mibebito':
             mentions = [target]
             txt = `${BOX_TOP}
-🍼 𝙵𝙸𝚄 𝙵𝙸𝚄 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 🍼
-${BOX_BOT}
-
-│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)} 😏
-│ 𝙽𝙸𝚅𝙴𝙻: ${porcentaje}%
+║ 𝗠𝗢𝗗𝗨𝗟𝗢 : 𝗙𝗜𝗨 𝗙𝗜𝗨 𝗗𝗘𝗧𝗘𝗖𝗧𝗔𝗗𝗢
+║
+║ 𝗧𝗔𝗥𝗚𝗘𝗧 : ${jidToTag(target)} 😏
+║ 𝗡𝗜𝗩𝗘𝗟 : ${porcentaje}%
 ${BOX_BOT}`
             break
 
         case 'bratz':
             mentions = [target]
             txt = `${BOX_TOP}
-💄 𝙱𝚁𝙰𝚃𝚉 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙰 💄
-${BOX_BOT}
-
-│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)}
-│ 𝙽𝙸𝚅𝙴𝙻: ${porcentaje}%
+║ 𝗠𝗢𝗗𝗨𝗟𝗢 : 𝗕𝗥𝗔𝗧𝗭 𝗗𝗘𝗧𝗘𝗖𝗧𝗔𝗗𝗔
+║
+║ 𝗧𝗔𝗥𝗚𝗘𝗧 : ${jidToTag(target)}
+║ 𝗡𝗜𝗩𝗘𝗟 : ${porcentaje}%
 ${BOX_BOT}`
             break
 
         case 'bellaka':
             mentions = [target]
             txt = `${BOX_TOP}
-💃 𝙱𝙴𝙻𝙰𝙺𝙰 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙰 💃
-${BOX_BOT}
-
-│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)}
-│ 𝙿𝙴𝚁𝙴𝙾: ${porcentaje}%
+║ 𝗠𝗢𝗗𝗨𝗟𝗢 : 𝗕𝗘𝗟𝗔𝗞𝗔 𝗗𝗘𝗧𝗘𝗖𝗧𝗔𝗗𝗔
+║
+║ 𝗧𝗔𝗥𝗚𝗘𝗧 : ${jidToTag(target)}
+║ 𝗣𝗘𝗥𝗘𝗢 : ${porcentaje}%
 ${BOX_BOT}`
             break
 
@@ -97,35 +98,32 @@ ${BOX_BOT}`
         case 'brother':
             mentions = [target]
             txt = `${BOX_TOP}
-👬 𝙵𝚁𝙰𝚂𝙴 𝙿𝙸𝚃𝚄𝙵𝙾 👬
-${BOX_BOT}
-
-│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)}
-│ 𝙳𝙸𝙲𝙴: ${frasesBro[Math.floor(Math.random()*4)]}
+║ 𝗠𝗢𝗗𝗨𝗟𝗢 : 𝗙𝗥𝗔𝗦𝗘 𝗣𝗜𝗧𝗨𝗙𝗢
+║
+║ 𝗧𝗔𝗥𝗚𝗘𝗧 : ${jidToTag(target)}
+║ 𝗙𝗥𝗔𝗦𝗘 : ${frasesBro[Math.floor(Math.random()*4)]}
 ${BOX_BOT}`
             break
 
         case 'perroinfiel':
             mentions = [target]
             txt = `${BOX_TOP}
-🐕 𝙿𝙴𝚁𝙾 𝙸𝙽𝙵𝙸𝙴𝙻 🐕
-${BOX_BOT}
-
-│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)}
-│ 𝙴𝚅𝙸𝙳𝙴𝙽𝙲𝙸𝙰: ${frasesPerro[Math.floor(Math.random()*4)]}
-│ 𝙽𝙸𝚅𝙴𝙻: ${porcentaje}%
+║ 𝗠𝗢𝗗𝗨𝗟𝗢 : 𝗣𝗘𝗥𝗥𝗢 𝗜𝗡𝗙𝗜𝗘𝗟
+║
+║ 𝗧𝗔𝗥𝗚𝗘𝗧 : ${jidToTag(target)}
+║ 𝗘𝗩𝗜𝗗𝗘𝗡𝗖𝗜𝗔 : ${frasesPerro[Math.floor(Math.random()*4)]}
+║ 𝗡𝗜𝗩𝗘𝗟 : ${porcentaje}%
 ${BOX_BOT}`
             break
 
         case 'mentiroso': case 'mentiras':
             mentions = [target]
             txt = `${BOX_TOP}
-🤥 𝙼𝙴𝙽𝚃𝙸𝚁𝙾𝚂𝙾 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 🤥
-${BOX_BOT}
-
-│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)}
-│ 𝙵𝚁𝙰𝚂𝙴: "Te lo juro por mi mamá"
-│ 𝙽𝙸𝚅𝙴𝙻: ${porcentaje}%
+║ 𝗠𝗢𝗗𝗨𝗟𝗢 : 𝗠𝗘𝗡𝗧𝗜𝗥𝗢𝗦𝗢 𝗗𝗘𝗧𝗘𝗖𝗧𝗔𝗗𝗢
+║
+║ 𝗧𝗔𝗥𝗚𝗘𝗧 : ${jidToTag(target)}
+║ 𝗙𝗥𝗔𝗦𝗘 : "𝗧𝗲 𝗹𝗼 𝗷𝘂𝗿𝗼 𝗽𝗼𝗿 𝗺𝗶 𝗺𝗮𝗺𝗮"
+║ 𝗡𝗜𝗩𝗘𝗟 : ${porcentaje}%
 ${BOX_BOT}`
             break
 
@@ -135,13 +133,12 @@ ${BOX_BOT}`
             let cuatro = getRandomUsers(4)
             mentions = cuatro
             txt = `${BOX_TOP}
-2️⃣ 𝚂𝙸𝚂𝚃𝙴𝙼𝙰 2𝙿2 2️⃣
-${BOX_BOT}
-
-│ 𝙿𝙰𝚁𝙴𝙹𝙰 1: ${jidToTag(cuatro[0])} ❤️ ${jidToTag(cuatro[1])}
-│ 𝙿𝙰𝚁𝙴𝙹𝙰 2: ${jidToTag(cuatro[2])} ❤️ ${jidToTag(cuatro[3])}
-│
-│ 𝙲𝙾𝙼𝙿𝙰𝚃𝙸𝙱𝙸𝙻𝙸𝙳𝙰𝙳 𝙳𝙴𝙻 𝙶𝚁𝚄𝙿𝙾: ${porcentaje}%
+║ 𝗠𝗢𝗗𝗨𝗟𝗢 : 𝗦𝗜𝗦𝗧𝗘𝗠𝗔 2𝗣2
+║
+║ 𝗣𝗔𝗥𝗘𝗝𝗔 1 : ${jidToTag(cuatro[0])} ❤️ ${jidToTag(cuatro[1])}
+║ 𝗣𝗔𝗥𝗘𝗝𝗔 2 : ${jidToTag(cuatro[2])} ❤️ ${jidToTag(cuatro[3])}
+║
+║ 𝗖𝗢𝗠𝗣𝗔𝗧𝗜𝗕𝗜𝗟𝗜𝗗𝗔𝗗 : ${porcentaje}%
 ${BOX_BOT}`
             break
 
@@ -150,14 +147,13 @@ ${BOX_BOT}`
             let seis = getRandomUsers(6)
             mentions = seis
             txt = `${BOX_TOP}
-3️⃣ 𝚂𝙸𝚂𝚃𝙴𝙼𝙰 3𝙿3 3️⃣
-${BOX_BOT}
-
-│ 𝙿𝙰𝚁𝙴𝙹𝙰 1: ${jidToTag(seis[0])} ❤️ ${jidToTag(seis[1])}
-│ 𝙿𝙰𝚁𝙴𝙹𝙰 2: ${jidToTag(seis[2])} ❤️ ${jidToTag(seis[3])}
-│ 𝙿𝙰𝚁𝙴𝙹𝙰 3: ${jidToTag(seis[4])} ❤️ ${jidToTag(seis[5])}
-│
-│ 𝙲𝙾𝙼𝙿𝙰𝚃𝙸𝙱𝙸𝙻𝙸𝙳𝙰𝙳 𝙳𝙴𝙻 𝙶𝚁𝚄𝙿𝙾: ${porcentaje}%
+║ 𝗠𝗢𝗗𝗨𝗟𝗢 : 𝗦𝗜𝗦𝗧𝗘𝗠𝗔 3𝗣3
+║
+║ 𝗣𝗔𝗥𝗘𝗝𝗔 1 : ${jidToTag(seis[0])} ❤️ ${jidToTag(seis[1])}
+║ 𝗣𝗔𝗥𝗘𝗝𝗔 2 : ${jidToTag(seis[2])} ❤️ ${jidToTag(seis[3])}
+║ 𝗣𝗔𝗥𝗘𝗝𝗔 3 : ${jidToTag(seis[4])} ❤️ ${jidToTag(seis[5])}
+║
+║ 𝗖𝗢𝗠𝗣𝗔𝗧𝗜𝗕𝗜𝗟𝗜𝗗𝗔𝗗 : ${porcentaje}%
 ${BOX_BOT}`
             break
 
@@ -167,14 +163,13 @@ ${BOX_BOT}`
             mentions = dos
             let frase = frasesDuo[Math.floor(Math.random() * frasesDuo.length)]
             txt = `${BOX_TOP}
-👯 𝙳𝚄𝙾 𝚁𝙰𝙽𝙳𝙾𝙼 👯
-${BOX_BOT}
-
-│ ${jidToTag(dos[0])} + ${jidToTag(dos[1])}
-│
-│ ${frase}
-│
-│ 𝙲𝙾𝙼𝙿𝙰𝚃𝙸𝙱𝙸𝙻𝙸𝙳𝙰𝙳: ${porcentaje}%
+║ 𝗠𝗢𝗗𝗨𝗟𝗢 : 𝗗𝗨𝗢 𝗥𝗔𝗡𝗗𝗢𝗠
+║
+║ 𝗨𝗦𝗨𝗔𝗥𝗜𝗢 1 : ${jidToTag(dos[0])}
+║ 𝗨𝗦𝗨𝗔𝗥𝗜𝗢 2 : ${jidToTag(dos[1])}
+║
+║ 𝗥𝗘𝗦𝗨𝗟𝗧𝗔𝗗𝗢 : ${frase}
+║ 𝗖𝗢𝗠𝗣𝗔𝗧𝗜𝗕𝗜𝗟𝗜𝗗𝗔𝗗 : ${porcentaje}%
 ${BOX_BOT}`
             break
 
