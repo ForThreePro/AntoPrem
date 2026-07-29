@@ -30,8 +30,19 @@ handler.before = async function (m, { conn }) {
         }
     }
 
-    // BANNER DEL GRUPO O DEFAULT
-    let banner = getBotConfig(conn, 'banner') || 'https://i.imgur.com/2wzZ3eB.png'
+    // BANNER DEL GRUPO > BANNER BOT > FOTO USER > DEFAULT
+    let banner = getBotConfig(conn, 'banner')
+    if (!banner) {
+        try {
+            banner = await conn.profilePictureUrl(m.chat, 'image')
+        } catch {
+            try {
+                banner = await conn.profilePictureUrl(userss, 'image')
+            } catch {
+                banner = 'https://i.imgur.com/2wzZ3eB.png'
+            }
+        }
+    }
 
     // DISEÑO CYBER PROMOTE
     const admingp = `
@@ -59,7 +70,7 @@ handler.before = async function (m, { conn }) {
 ║ 𝗦𝗧𝗔𝗧𝗨𝗦 : ❌ RANGO REVOCADO
 ║ 𝗕𝗬 : ${adminTag}
 ║
-╠═══「 𝗔𝗖𝗖𝗘𝗦𝗢 𝗗𝗘𝗡𝗘𝗚𝗔𝗗𝗢 」═══╣
+╠═══「 𝗔𝗖𝗘𝗦𝗢 𝗗𝗘𝗡𝗘𝗚𝗔𝗗𝗢 」═══╣
 ║ [✗] Sin permisos de admin
 ║ [✗] Comandos bloqueados
 ║ [✗] Solo miembro
@@ -86,7 +97,7 @@ handler.before = async function (m, { conn }) {
         await conn.sendMessage(m.chat, {
             image: { url: banner },
             caption: admingp,
-          ...context
+         ...context
         }, { quoted: null })
         return
     }
@@ -96,7 +107,7 @@ handler.before = async function (m, { conn }) {
         await conn.sendMessage(m.chat, {
             image: { url: banner },
             caption: noadmingp,
-          ...context
+         ...context
         }, { quoted: null })
         return
     }
