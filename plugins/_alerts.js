@@ -7,17 +7,17 @@ const lidCache = new Map()
 let handler = m => m
 
 handler.before = async function (m, { conn }) {
-    if (!m.messageStubType || !m.isGroup) return
+    if (!m.messageStubType ||!m.isGroup) return
 
-    let chat = globalThis.db.data.chats[m.chat]
+    let chat = global.db.data.chats[m.chat]
     let userss = m.messageStubParameters?.[0]
     if (!userss) return
 
     const realSenderRaw = await resolveLidToRealJid(m?.sender, conn, m?.chat)
-    const realSender = realSenderRaw?.includes('@') ? realSenderRaw : null
+    const realSender = realSenderRaw?.includes('@')? realSenderRaw : null
 
     const userTag = `@${userss.split('@')[0]}`
-    const adminTag = realSender ? `@${realSender.split('@')[0]}` : 'Sistema'
+    const adminTag = realSender? `@${realSender.split('@')[0]}` : 'SISTEMA'
 
     const mentions = [userss]
     if (realSender) mentions.push(realSender)
@@ -29,41 +29,48 @@ handler.before = async function (m, { conn }) {
         }
     }
 
+    // DISEÑO NUEVO CYBER MASCULINO
     const admingp = `
-╔═══❖•°•°•°❖•°•°•°❖═══╗
-👑 𝐍𝐔𝐄𝐕𝐎 𝐀𝐃𝐌𝐈𝐍 👑
-╚═══❖•°•°•°❖•°•°•°❖═══╝
+⚡━━━━━━━━━━━━━━━⚡
+👑 𝙽𝚄𝙴𝚅𝙾 𝙰𝙳𝙼𝙸𝙽 𝙰𝚂𝙸𝙶𝙽𝙰𝙳𝙾 👑
+⚡━━━━━━━━━━━━━━━⚡
 
-✨ ${userTag}
-ahora es ADMINISTRADOR
+💀 𝚄𝚂𝚄𝙰𝚁𝙸𝙾: ${userTag}
+⚡ 𝙴𝚂𝚃𝙰𝙳𝙾: Rango Ascendido
 
-📌 Acción realizada por:
-${adminTag}
+🛡️ 𝙰𝚄𝚃𝙾𝚁𝙸𝚉𝙰𝙳𝙾 𝙿𝙾𝚁: ${adminTag}
 
-╔═══❖•°•°•°❖•°•°•°❖═══╗
-⚡ 𝐏𝐎𝐃𝐄𝐑 𝐎𝐓𝐎𝐑𝐆𝐀𝐃Ｏ ⚡
-╚═══❖•°•°•°❖•°•°•°❖═══╝
+╭─「 𝙿𝙾𝙳𝙴𝚁𝙴𝚂 𝙰𝙲𝚃𝙸𝚅𝙰𝙳𝙾𝚂 」─╮
+│ 🔧 Kick / Promote / Demote
+│ 🛡️ Editar info del grupo
+│ 📢 Anuncios y Config
+╰───────────────────╯
+
+> "El poder conlleva responsabilidad"
 `.trim()
 
     const noadmingp = `
-╔═══❖•°•°•°❖•°•°•°❖═══╗
-⚠️ 𝐀𝐃𝐌𝐈𝐍 𝐑𝐄𝐌𝐎𝐕𝐈𝐃𝐎 ⚠️
-╚═══❖•°•°•°❖•°•°•°❖═══╝
+⚡━━━━━━━━━━━━━━━⚡
+🔒 𝙰𝙳𝙼𝙸𝙽 𝙳𝙴𝙶𝚁𝙰𝙳𝙰𝙳𝙾 🔒
+⚡━━━━━━━━━━━━━━━⚡
 
-❌ ${userTag}
-ya no es administrador
+❌ 𝚄𝚂𝚄𝙰𝚁𝙸𝙾: ${userTag}
+⚠️ 𝙴𝚂𝚃𝙰𝙳𝙾: Rango Revocado
 
-📌 Acción realizada por:
-${adminTag}
+🛡️ 𝙰𝙲𝙲𝙸𝙾𝙽 𝙿𝙾𝚁: ${adminTag}
 
-╔═══❖•°•°•°❖•°•°•°❖═══╗
-🔒 𝐏ＥＲＭＩＳＯＳ 𝐑𝐄𝐕𝐎𝐂ＡＤ𝐎Ｓ 🔒
-╚═══❖•°•°•°❖•°•°•°❖═══╝
+╭─「 𝙿𝙴𝚁𝙼𝙸𝚂𝙾𝚂 𝚁𝙴𝚅𝙾𝙲𝙰𝙳𝙾𝚂 」─╮
+│ ❌ Ya no puede administrar
+│ ❌ Acceso denegado a comandos
+╰──────────────────────╯
+
+> "Sin rango, sin poder"
 `.trim()
 
+    // LIMPIAR SESSION SI KICKEAN BOT
     if (chat.detect && m.messageStubType == 2) {
-        const uniqid = (m.isGroup ? m.chat : m.sender).split('@')[0]
-        const sessionPath = `./sessions/` 
+        const uniqid = (m.isGroup? m.chat : m.sender).split('@')[0]
+        const sessionPath = `./sessions/`
         for (const file of await fs.readdir(sessionPath)) {
             if (file.includes(uniqid)) {
                 await fs.unlink(path.join(sessionPath, file))
@@ -71,20 +78,22 @@ ${adminTag}
         }
     }
 
+    // PROMOTE
     if (chat.alerts && m.messageStubType == 29) {
         await conn.sendMessage(m.chat, {
             image: { url: getBotConfig(conn, 'banner') },
             caption: admingp,
-            ...context
+           ...context
         }, { quoted: null })
         return
     }
 
+    // DEMOTE
     if (chat.alerts && m.messageStubType == 30) {
         await conn.sendMessage(m.chat, {
             image: { url: getBotConfig(conn, 'banner') },
             caption: noadmingp,
-            ...context
+           ...context
         }, { quoted: null })
         return
     }
@@ -96,8 +105,8 @@ export default handler
 
 async function resolveLidToRealJid(lid, conn, groupChatId, maxRetries = 3, retryDelay = 60000) {
     const inputJid = lid?.toString?.() || ''
-    if (!inputJid.endsWith("@lid") || !groupChatId?.endsWith("@g.us")) {
-        return inputJid.includes("@") ? inputJid : `${inputJid}@s.whatsapp.net`
+    if (!inputJid.endsWith("@lid") ||!groupChatId?.endsWith("@g.us")) {
+        return inputJid.includes("@")? inputJid : `${inputJid}@s.whatsapp.net`
     }
 
     if (lidCache.has(inputJid)) {
