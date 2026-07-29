@@ -52,7 +52,7 @@ var handler = async (m, { conn, participants }) => {
 };
 
 handler.help = ['kickall'];
-handler.tags = ['𝗴𝗿𝘂𝗽𝗼'];
+handler.tags = ['group'];
 handler.command = ['kickall'];
 handler.admin = true;
 handler.botAdmin = true;
