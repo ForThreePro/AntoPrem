@@ -1,18 +1,16 @@
 import { WAMessageStubType } from '@whiskeysockets/baileys';
 
 export async function before(m, { conn, participants, groupMetadata }) {
-    if (!m.messageStubType || !m.isGroup) return true;
+    if (!m.messageStubType ||!m.isGroup) return true;
 
-    const chat = globalThis.db.data.chats[m.chat];
+    const chat = global.db.data.chats[m.chat];
+    if (!chat.welcome) return true;
 
     const target = m.messageStubParameters?.[0];
     if (!target) return true;
 
-    const userData = globalThis.db.data.users[target] || {};
+    const userData = global.db.data.users[target] || {};
     const targetName = userData.name || await conn.getName(target) || `@${target.split('@')[0]}`;
-
-    const ppUrl = await conn.profilePictureUrl(target, 'image')
-        .catch(() => 'https://raw.githubusercontent.com/Kone457/Nexus/refs/heads/main/Datos/IMG-20260422-WA0136.jpg');
 
     const actor = m.participant || m.key.participant || m.messageStubParameters?.[1] || null;
 
@@ -22,63 +20,70 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
     const actionText = {
         [WAMessageStubType.GROUP_PARTICIPANT_ADD]:
-            actor ? `Agregado por @${actor.split('@')[0]}` : 'Se unió al grupo',
+            actor? `Reclutado por @${actor.split('@')[0]}` : 'Ingreso al sistema',
 
-        [WAMessageStubType.GROUP_PARTICIPANT_REMOVE]:  
-            actor ? `Eliminado por @${actor.split('@')[0]}` : 'Eliminado del grupo',  
+        [WAMessageStubType.GROUP_PARTICIPANT_REMOVE]:
+            actor? `Eliminado por @${actor.split('@')[0]}` : 'Expulsado del sistema',
 
-        [WAMessageStubType.GROUP_PARTICIPANT_LEAVE]:  
-            'Salió del grupo'
+        [WAMessageStubType.GROUP_PARTICIPANT_LEAVE]:
+            'Abandonó el sistema'
     };
 
     const format = (text) => {
         return text
-            .replace('@user', `@${target.split('@')[0]}`)
-            .replace('@name', targetName)
-            .replace('@group', groupMetadata.subject)
-            .replace('@desc', groupMetadata.desc?.toString() || 'Sin descripción')
-            .replace('%users', memberCount)
-            .replace('@action', actionText[m.messageStubType] || '')
-            .replace('@date', new Date().toLocaleString());
+         .replace('@user', `@${target.split('@')[0]}`)
+         .replace('@name', targetName)
+         .replace('@group', groupMetadata.subject)
+         .replace('@desc', groupMetadata.desc?.toString() || 'Sin descripción')
+         .replace('%users', memberCount)
+         .replace('@action', actionText[m.messageStubType] || '')
+         .replace('@date', new Date().toLocaleString('es-PE'));
     };
 
+    // DETECTAR SI TIENE FOTO O NO
+    let ppUrl;
+    try {
+        ppUrl = await conn.profilePictureUrl(target, 'image');
+    } catch {
+        // Si no tiene foto, usa tu banner cyber
+        ppUrl = 'https://d.uguu.se/hNMqwsKZ.jpg'
+    }
+
     const welcome = format(`
-╔═══❖•°•°•°❖•°•°•°❖═══╗
-🌟 𝐁𝐈𝐄𝐍𝐕𝐄𝐍𝐈𝐃𝐎 🌟
-╚═══❖•°•°•°❖•°•°•°❖═══╝
+⚡━━━━━━━━━━━━━━━⚡
+💀 𝙽𝚄𝙴𝚅𝙾 𝙾𝙿𝙴𝚁𝙰𝚃𝙸𝚅𝙾 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 💀
+⚡━━━━━━━━━━━━━━━⚡
 
-👤 Usuario: @name
-🏷️ Grupo: @group
+🆔 𝙽𝙾𝙼𝙱𝚁𝙴: @name
+👥 𝙶𝚁𝚄𝙿𝙾: @group
 
-📌 @action
+📡 𝙴𝚂𝚃𝙰𝙳𝙾: @action
 
-📜 Descripción del grupo:
-@desc
+╭─「 𝙸𝙽𝙵𝙾 𝙳𝙴𝙻 𝚂𝙸𝚂𝚃𝙴𝙼𝙰 」─╮
+│ 📜 𝙳𝙴𝚂𝙲: @desc
+│ 👥 𝙼𝙸𝙴𝙼𝙱𝚁𝙾𝚂: %users
+│ ⚠️ 𝙰𝙳𝚅𝙴𝚁𝚃𝙴𝙽𝙲𝙸𝙰: Lee reglas o ban
+╰───────────────────────╯
 
-👥 Miembro # %users
-⚠️ Lee las reglas para evitar BAN.
-
-╔═══❖•°•°•°❖•°•°•°❖═══╗
-✦ 𝐃𝐈𝐒𝐅𝐑𝐔𝐓𝐀 𝐓𝐔 𝐄𝐒𝐓𝐀𝐃𝐈𝐀 ✦
-╚═══❖•°•°•°❖•°•°•°❖═══╝
+> "Bienvenido a la red. No la cagues"
 `.trim());
 
     const bye = format(`
-╔═══❖•°•°•°❖•°•°•°❖═══╗
-💔 𝐇𝐀𝐒𝐓𝐀 𝐏𝐑𝐎𝐍𝐓𝐎 💔
-╚═══❖•°•°•°❖•°•°•°❖═══╝
+⚡━━━━━━━━━━━━━━━⚡
+🔻 𝙾𝙿𝙴𝚁𝙰𝚃𝙸𝚅𝙾 𝙳𝙰𝙳𝙾 𝙳𝙴 𝙱𝙰𝙹𝙰 🔻
+⚡━━━━━━━━━━━━━━━⚡
 
-👤 Usuario: @name
-🏷️ Grupo: @group
+🆔 𝙽𝙾𝙼𝙱𝚁𝙴: @name
+👥 𝙶𝚁𝚄𝙿𝙾: @group
 
-📌 @action
+📡 𝙴𝚂𝚃𝙰𝙳𝙾: @action
 
-😢 Esperamos que vuelvas pronto...
-👥 Miembros ahora: %users
+╭─「 𝚁𝙴𝙿𝙾𝚁𝚃𝙴 」─╮
+│ 👥 𝙼𝙸𝙴𝙼𝙱𝚁𝙾𝚂 𝙰𝙲𝚃𝚄𝙰𝙻𝙴𝚂: %users
+│ 🕐 𝚂𝙰𝙻𝙸𝙳𝙰: @date
+╰────────────────╯
 
-╔═══❖•°•°•°❖•°•°•°❖═══╗
-✦ 𝐕𝐔𝐄𝐋𝐕𝐄 𝐂𝐔𝐀𝐍𝐃𝐎 𝐐𝐔𝐈𝐄𝐑𝐀𝐒 ✦
-╚═══❖•°•°•°❖•°•°•°❖═══╝
+> "Un soldado menos. El sistema sigue"
 `.trim());
 
     const mentions = [target];
@@ -91,22 +96,19 @@ export async function before(m, { conn, participants, groupMetadata }) {
         }
     };
 
-    if (chat.welcome && m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
+    if (m.messageStubType === WAMessageStubType.GROUP_PARTICIPANT_ADD) {
         await conn.sendMessage(m.chat, {
             image: { url: ppUrl },
             caption: welcome,
-            ...context
+         ...context
         });
     }
 
-    if (chat.welcome && [
-        WAMessageStubType.GROUP_PARTICIPANT_LEAVE,
-        WAMessageStubType.GROUP_PARTICIPANT_REMOVE
-    ].includes(m.messageStubType)) {
+    if ([WAMessageStubType.GROUP_PARTICIPANT_LEAVE, WAMessageStubType.GROUP_PARTICIPANT_REMOVE].includes(m.messageStubType)) {
         await conn.sendMessage(m.chat, {
             image: { url: ppUrl },
             caption: bye,
-            ...context
+         ...context
         });
     }
 }
