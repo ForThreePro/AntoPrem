@@ -3,19 +3,20 @@ let handler = async (m, { conn, args, command, isOwner }) => {
   const chatData = global.db.data.chats[m.chat];
   const botSettings = global.db.data.settings[conn.user.jid];
 
-  const on = '🟢';
-  const off = '🔴';
+  const on = '✅';
+  const off = '❌';
 
-  // AGARRAR FOTO DEL GRUPO
+  // AGARRAR FOTO Y NOMBRE DEL GRUPO
   let pp;
+  let groupName = await conn.getName(m.chat);
   try {
     pp = await conn.profilePictureUrl(m.chat, 'image');
   } catch {
-    pp = 'https://telegra.ph/file/24fa902ead26340f85fbe.png'; // foto default si no hay
+    pp = 'https://i.imgur.com/2wzZ3eB.png'; // default si no hay foto
   }
 
   const configList = `
-╭─ 「 ⚙️ PANEL DE CONTROL 」─╮
+╭─❒ 「 ⚙️ CONFIGURACION 」 ❒─╮
 │
 │ ${chatData.welcome? on : off} Bienvenida
 │ ${chatData.antiLink? on : off} AntiLink
@@ -28,15 +29,15 @@ let handler = async (m, { conn, args, command, isOwner }) => {
 │ ${chatData.notprefix? on : off} Sin Prefijo
 │ ${botSettings?.jadibotmd? on : off} SubBots
 │
-├─ 「 📝 COMO USAR 」─
-│.${command} welcome on
-│.${command} antilink off
-╰──────────────────╯`.trim();
+├─❒ 「 📝 USO 」 ❒─
+│.${command} welcome on/off
+│.${command} antilink on/off
+╰───────────❒`.trim();
 
   if (!setting) {
     return conn.sendMessage(m.chat, {
       image: { url: pp },
-      caption: configList,
+      caption: `*${groupName}*\n${configList}`,
       mentions: [m.sender]
     }, { quoted: m });
   }
@@ -45,12 +46,12 @@ let handler = async (m, { conn, args, command, isOwner }) => {
   const reply = (name) => conn.sendMessage(m.chat, {
     image: { url: pp },
     caption: `
-╭─ 「 ⚙️ ACTUALIZADO 」─╮
+╭─❒ 「 ⚙️ ACTUALIZADO 」 ❒─╮
 │
-│ Función: ${name}
-│ Estado: ${status? '🟢 ACTIVADO' : '🔴 DESACTIVADO'}
+│ 📌 Función: ${name}
+│ 📊 Estado: ${status? '✅ ACTIVADO' : '❌ DESACTIVADO'}
 │
-╰──────────────────╯`.trim(),
+╰───────────❒`.trim(),
     mentions: [m.sender]
   }, { quoted: m });
 
@@ -83,14 +84,14 @@ let handler = async (m, { conn, args, command, isOwner }) => {
       chatData.notprefix = status; reply('Sin Prefijo'); break;
 
     case 'serbot': case 'jadibot': case 'subbots':
-      if (!isOwner) return m.reply(`╭─ 「 ⛔ ERROR 」─╮\n│\n│ Solo el Owner\n│\n╰──────────────────╯`);
+      if (!isOwner) return m.reply(`╭─❒ 「 ⛔ ERROR 」 ❒─╮\n│\n│ Solo el Owner puede usar esto\n│\n╰───────────❒`);
       if (botSettings) { botSettings.jadibotmd = status; reply('SubBots'); }
       break;
 
     default:
       return conn.sendMessage(m.chat, {
         image: { url: pp },
-        caption: `╭─ 「 ⚠️ ERROR 」─╮\n│\n│ Opción no válida\n│\n╰──────────────────╯\n\n${configList}`,
+        caption: `╭─❒ 「 ⚠️ ERROR 」 ❒─╮\n│\n│ Opción no válida\n│\n╰───────────❒\n\n${configList}`,
         mentions: [m.sender]
       }, { quoted: m });
   }
