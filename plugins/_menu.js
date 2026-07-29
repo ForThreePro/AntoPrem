@@ -40,11 +40,11 @@ const byTag = {}
 
 for (const plugin of pluginsActivos) {
   const tags = Array.isArray(plugin.tags)
-   ? plugin.tags
+ ? plugin.tags
     : (plugin.tags? [plugin.tags] : [])
 
   const helps = Array.isArray(plugin.help)
-   ? plugin.help
+ ? plugin.help
     : (plugin.help? [plugin.help] : [])
 
   for (const tag of tags) {
@@ -71,7 +71,7 @@ const botType = isMainBot? '🤖 MAIN BOT' : '👾 SUB-BOT'
 
 let menuTexto = ''
 
-menuTexto += `┏━━━━━━━━━━━━━━━━━━━━━┓\n`
+menuTexto += `┏━━━━━━━━━━━━━┓\n`
 menuTexto += `┃ 🌐 𝚂𝚈𝚂𝚃𝙴𝙼 𝙾𝙽𝙻𝙸𝙽𝙴 🌐 ┃\n`
 menuTexto += `┗━━━━━━━━━━━━━━━━━━━━━┛\n\n`
 menuTexto += `👋 *𝙷𝚘𝚕𝚊:* @${userName}\n`
@@ -82,7 +82,7 @@ menuTexto += `│ ⏰ 𝙷𝚘𝚛𝚊: ${hora}\n`
 menuTexto += `│ 📦 𝙿𝚕𝚞𝚐𝚒𝚗𝚜: ${pluginsCount}\n`
 menuTexto += `│ 👨‍💻 𝙲𝚛𝚎𝚊𝚍𝚘𝚛: Whois Yallico\n`
 menuTexto += `╰───────────────────╯\n\n`
-menuTexto += `🔗 𝙲𝚊𝚗𝚊𝚕: https://whatsapp.com/channel/0029Vb8emrOJuyACodGSbP0z\n\n`
+menuTexto += `🔗 𝙲𝚊𝚗𝚊𝚕: https://whatsapp.com/channel/0029Vb7h1qC65yDEhghegc2O\n\n`
 
 for (const tag of Object.keys(CATEGORY_META)) {
   const set = byTag[tag]
@@ -104,8 +104,11 @@ menuTexto += `│ 💙 𝙿𝚘𝚠𝚎𝚛𝚎𝚍 𝚋𝚢 Whois Yallico\n`
 menuTexto += `│ 🚀 𝚅𝚎𝚛𝚜𝚒𝚘𝚗: Cyber v2.0\n`
 menuTexto += `╰───────────────────╯`
 
+// LINK FIJO DIRECTO
+const IMG_MENU = 'https://d.uguu.se/hNMqwsKZ.jpg'
+
 await conn.sendMessage(m.chat, {
-  image: { url: getBotConfig(conn, 'banner2') },
+  image: { url: IMG_MENU },
   caption: menuTexto.trim(),
   mentions: [m.sender]
 }, { quoted: m })
