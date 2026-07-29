@@ -1,75 +1,80 @@
-import fetch from "node-fetch";
-import crypto from "crypto";
-import { FormData, File } from "formdata-node";
-import { fileTypeFromBuffer } from "file-type";
+import crypto from "crypto"
+import { FormData, Blob } from "formdata-node"
+import { fileTypeFromBuffer } from "file-type"
 
 let handler = async (m, { conn }) => {
-  let q = m.quoted ? m.quoted : m;
-  let mime = (q.msg || q).mimetype || "";
-
-  if (!mime) {
-    return conn.reply(m.chat, "《✧》 Por favor, responde a un archivo válido.", m);
-  }
+  let q = m.quoted ? m.quoted : m
+  let mime = (q.msg || q).mimetype || ''
+  if (!mime) return conn.reply(m.chat, `╭─❒ *『 𝗖𝗬𝗕𝗘𝗥 𝗕𝗢𝗧 』* ❒
+│ ⚠️ *ERROR DE SISTEMA*
+│
+│ 🤖 *Responde a un archivo válido*
+│ ⚡ *Formatos:* Imagen, Video, Audio, Doc
+╰─────────────────❒`, m)
 
   try {
-    const media = await q.download();
-    const link = await uploadUguu(media);
+    await conn.sendMessage(m.chat, { react: { text: '⏳', key: m.key } })
 
-    const txt = `*乂 U G U U - U P L O A D E R 乂*\n\n`
-      + `*» Enlace:* ${link}\n`
-      + `*» Tamaño:* ${formatBytes(media.length)}`;
+    let media = await q.download()
+    let link = await myCloud(media)
 
-    await conn.sendFile(m.chat, media, "archivo", txt, m);
+    if (!link.success) throw new Error()
+
+    let txt = `╭─❒ *『 𝗖𝗬𝗕𝗘𝗥 𝗕𝗢𝗧 』* ❒
+│ ☁️ *ARCHIVO SUBIDO A LA NUBE*
+│
+│ 🔗 *Enlace:* ${link.url}
+│ 🆔 *ID:* ${link.id}
+│ 📊 *Tamaño:* ${formatBytes(media.length)}
+│ ⚡ *Servidor:* evogb.win
+│
+│ > *“Archivo almacenado en el servidor”*
+╰─────────────────❒`
+
+    await conn.sendFile(m.chat, media, 'file.' + link.url.split('.').pop(), txt, m)
+    await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } })
   } catch (e) {
-    console.error(e);
-    m.reply(`《✧》 Error al subir el archivo.\n\n*Detalles:* ${e.message}`);
+    console.error(e)
+    await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } })
+    await conn.reply(m.chat, `╭─❒ *『 𝗖𝗬𝗕𝗘𝗥 𝗕𝗢𝗧 』* ❒
+│ ❌ *ERROR DE SUBIDA*
+│
+│ ⚡ *No se pudo subir el archivo*
+│ 🤖 *Intenta de nuevo en unos seg*
+╰─────────────────❒`, m)
   }
-};
-
-handler.help = ["tourl2"];
-handler.tags = ["tools"];
-handler.command = ["tourl2"];
-
-export default handler;
-
-function formatBytes(bytes) {
-  if (!bytes) return "0 B";
-  const sizes = ["B", "KB", "MB", "GB", "TB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`;
 }
 
-async function uploadUguu(buffer) {
-  const type = await fileTypeFromBuffer(buffer);
+handler.help = ['upp', 'tourl']
+handler.tags = ['tools']
+handler.command = ['upp', 'tourl']
 
-  if (!type) throw new Error("No se pudo detectar el tipo de archivo.");
+export default handler
 
-  const form = new FormData();
+function formatBytes(bytes) {
+  if (bytes === 0) return '0 B'
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
+  const i = Math.floor(Math.log(bytes) / Math.log(1024))
+  return `${(bytes / 1024 ** i).toFixed(2)} ${sizes[i]}`
+}
 
-  form.set(
-    "files[]",
-    new File(
-      [buffer],
-      `${crypto.randomBytes(6).toString("hex")}.${type.ext}`,
-      { type: type.mime }
-    )
-  );
+async function myCloud(content) {
+  const fileType = await fileTypeFromBuffer(content)
+  const ext = fileType ? fileType.ext : 'bin'
+  const mime = fileType ? fileType.mime : 'application/octet-stream'
 
-  const res = await fetch("https://uguu.se/upload.php", {
+  const formData = new FormData()
+  const blob = new Blob([content], { type: mime })
+  const fileName = `${crypto.randomBytes(5).toString("hex")}.${ext}`
+
+  formData.append("file", blob, fileName)
+
+  const response = await fetch("https://evogb.win/api/upload", {
     method: "POST",
-    body: form,
-    headers: form.headers
-  });
+    body: formData
+  })
 
-  const json = await res.json();
+  if (!response.ok) throw new Error()
 
-  if (!res.ok) {
-    throw new Error(json.message || "Error al subir el archivo.");
-  }
-
-  if (!json.success || !json.files?.length) {
-    throw new Error(json.message || "La subida falló.");
-  }
-
-  return json.files[0].url;
+  return await response.json()
 }
