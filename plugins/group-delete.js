@@ -19,7 +19,7 @@ try {
 }}
 
 handler.help = ['delete']
-handler.tags = ['𝗴𝗿𝘂𝗽𝗼']
+handler.tags = ['group']
 handler.command = ['del','delete','d']
 handler.group = true
 handler.admin = true
