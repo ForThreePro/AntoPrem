@@ -20,24 +20,24 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
     const actionText = {
         [WAMessageStubType.GROUP_PARTICIPANT_ADD]:
-            actor? `Reclutado por @${actor.split('@')[0]}` : 'Ingreso al sistema',
+            actor? `𝗥𝗲𝗰𝗹𝘂𝘁𝗮𝗱𝗼 𝗽𝗼𝗿 @${actor.split('@')[0]}` : '𝗜𝗻𝗴𝗿𝗲𝘀𝗼 𝗮𝗹 𝘀𝗶𝘀𝘁𝗲𝗺𝗮',
 
         [WAMessageStubType.GROUP_PARTICIPANT_REMOVE]:
-            actor? `Eliminado por @${actor.split('@')[0]}` : 'Expulsado del sistema',
+            actor? `𝗘𝗹𝗶𝗺𝗶𝗻𝗮𝗱𝗼 𝗽𝗼𝗿 @${actor.split('@')[0]}` : '𝗘𝘅𝗽𝘂𝗹𝘀𝗮𝗱𝗼 𝗱𝗲𝗹 𝘀𝗶𝘀𝘁𝗲𝗺𝗮',
 
         [WAMessageStubType.GROUP_PARTICIPANT_LEAVE]:
-            'Abandonó el sistema'
+            '𝗔𝗯𝗮𝗻𝗱𝗼𝗻𝗼 𝗲𝗹 𝘀𝗶𝘀𝘁𝗲𝗺𝗮'
     };
 
     const format = (text) => {
         return text
-         .replace('@user', `@${target.split('@')[0]}`)
-         .replace('@name', targetName)
-         .replace('@group', groupMetadata.subject)
-         .replace('@desc', groupMetadata.desc?.toString() || 'Sin descripción')
-         .replace('%users', memberCount)
-         .replace('@action', actionText[m.messageStubType] || '')
-         .replace('@date', new Date().toLocaleString('es-PE'));
+        .replace('@user', `@${target.split('@')[0]}`)
+        .replace('@name', targetName)
+        .replace('@group', groupMetadata.subject)
+        .replace('@desc', groupMetadata.desc?.toString() || '𝗦𝗶𝗻 𝗱𝗲𝘀𝗰𝗿𝗶𝗽𝗰𝗶𝗼𝗻')
+        .replace('%users', memberCount)
+        .replace('@action', actionText[m.messageStubType] || '')
+        .replace('@date', new Date().toLocaleString('es-PE'));
     };
 
     // DETECTAR SI TIENE FOTO O NO
@@ -51,39 +51,39 @@ export async function before(m, { conn, participants, groupMetadata }) {
 
     const welcome = format(`
 ⚡━━━━━━━━━━━━━━━⚡
-💀 𝙽𝚄𝙴𝚅𝙾 𝙾𝙿𝙴𝚁𝙰𝚃𝙸𝚅𝙾 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 💀
+💀 𝗡𝗨𝗘𝗩𝗢 𝗢𝗣𝗘𝗥𝗔𝗧𝗜𝗩𝗢 𝗗𝗘𝗧𝗘𝗖𝗧𝗔𝗗𝗢 💀
 ⚡━━━━━━━━━━━━━━━⚡
 
-🆔 𝙽𝙾𝙼𝙱𝚁𝙴: @name
-👥 𝙶𝚁𝚄𝙿𝙾: @group
+🆔 𝗡𝗢𝗠𝗕𝗥𝗘: @name
+👥 𝗚𝗥𝗨𝗣𝗢: @group
 
-📡 𝙴𝚂𝚃𝙰𝙳𝙾: @action
+📡 𝗘𝗦𝗧𝗔𝗗𝗢: @action
 
-╭─「 𝙸𝙽𝙵𝙾 𝙳𝙴𝙻 𝚂𝙸𝚂𝚃𝙴𝙼𝙰 」─╮
-│ 📜 𝙳𝙴𝚂𝙲: @desc
-│ 👥 𝙼𝙸𝙴𝙼𝙱𝚁𝙾𝚂: %users
-│ ⚠️ 𝙰𝙳𝚅𝙴𝚁𝚃𝙴𝙽𝙲𝙸𝙰: Lee reglas o ban
+╭─「 𝗜𝗡𝗙𝗢 𝗗𝗘𝗟 𝗦𝗜𝗦𝗧𝗘𝗠𝗔 」─╮
+│ 📜 𝗗𝗘𝗦𝗖: @desc
+│ 👥 𝗠𝗜𝗘𝗠𝗕𝗥𝗢𝗦: %users
+│ ⚠️ 𝗔𝗗𝗩𝗘𝗥𝗧𝗘𝗡𝗖𝗜𝗔: 𝗟𝗲𝗲 𝗿𝗲𝗴𝗹𝗮𝘀 𝗼 𝗯𝗮𝗻
 ╰───────────────────────╯
 
-> "Bienvenido a la red. No la cagues"
+> "𝗕𝗶𝗲𝗻𝘃𝗲𝗻𝗶𝗱𝗼 𝗮 𝗹𝗮 𝗿𝗲𝗱. 𝗡𝗼 𝗹𝗮 𝗰𝗮𝗴𝘂𝗲𝘀"
 `.trim());
 
     const bye = format(`
 ⚡━━━━━━━━━━━━━━━⚡
-🔻 𝙾𝙿𝙴𝚁𝙰𝚃𝙸𝚅𝙾 𝙳𝙰𝙳𝙾 𝙳𝙴 𝙱𝙰𝙹𝙰 🔻
+🔻 𝗢𝗣𝗘𝗥𝗔𝗧𝗜𝗩𝗢 𝗗𝗔𝗗𝗢 𝗗𝗘 𝗕𝗔𝗝𝗔 🔻
 ⚡━━━━━━━━━━━━━━━⚡
 
-🆔 𝙽𝙾𝙼𝙱𝚁𝙴: @name
-👥 𝙶𝚁𝚄𝙿𝙾: @group
+🆔 𝗡𝗢𝗠𝗕𝗥𝗘: @name
+👥 𝗚𝗥𝗨𝗣𝗢: @group
 
-📡 𝙴𝚂𝚃𝙰𝙳𝙾: @action
+📡 𝗘𝗦𝗧𝗔𝗗𝗢: @action
 
-╭─「 𝚁𝙴𝙿𝙾𝚁𝚃𝙴 」─╮
-│ 👥 𝙼𝙸𝙴𝙼𝙱𝚁𝙾𝚂 𝙰𝙲𝚃𝚄𝙰𝙻𝙴𝚂: %users
-│ 🕐 𝚂𝙰𝙻𝙸𝙳𝙰: @date
+╭─「 𝗥𝗘𝗣𝗢𝗥𝗧𝗘 」─╮
+│ 👥 𝗠𝗜𝗘𝗠𝗕𝗥𝗢𝗦 𝗔𝗖𝗧𝗨𝗔𝗟𝗘𝗦: %users
+│ 🕐 𝗦𝗔𝗟𝗜𝗗𝗔: @date
 ╰────────────────╯
 
-> "Un soldado menos. El sistema sigue"
+> "𝗨𝗻 𝘀𝗼𝗹𝗱𝗮𝗱𝗼 𝗺𝗲𝗻𝗼𝘀. 𝗘𝗹 𝘀𝗶𝘀𝘁𝗲𝗺𝗮 𝘀𝗶𝗴𝘂𝗲"
 `.trim());
 
     const mentions = [target];
@@ -100,7 +100,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
         await conn.sendMessage(m.chat, {
             image: { url: ppUrl },
             caption: welcome,
-         ...context
+        ...context
         });
     }
 
@@ -108,7 +108,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
         await conn.sendMessage(m.chat, {
             image: { url: ppUrl },
             caption: bye,
-         ...context
+        ...context
         });
     }
 }
