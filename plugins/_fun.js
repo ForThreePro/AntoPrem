@@ -1,9 +1,10 @@
-let handler = async (m, { conn, command, args }) => { // AQUI FALTABA args
+let handler = async (m, { conn, command, text }) => {
     if(!m.isGroup) return m.reply('⚡ Solo funciona en grupos')
 
     let metadata = await conn.groupMetadata(m.chat)
     let users = metadata.participants.map(u => u.id)
     let porcentaje = Math.floor(Math.random() * 101)
+    let args = text.split(' ') // SACAMOS ARGS DEL TEXT
 
     const BOX_TOP = `⚡━━━━━━━━━━━━━━━⚡`
     const BOX_BOT = `⚡━━━━━━━━━━━━━━━⚡`
@@ -17,30 +18,27 @@ let handler = async (m, { conn, command, args }) => { // AQUI FALTABA args
         return shuffled.slice(0, cantidad)
     }
 
-    async function getName(jid) {
-        let name = await conn.getName(jid).catch(_ => null)
-        return name || jid.split('@')[0]
+    function jidToTag(jid) {
+        return '@' + jid.split('@')[0]
     }
 
     let txt = ''
     let mentions = []
 
-    // AGARRA TAG, REPLY O NUMERO
-    let target = m.mentionedJid[0] || m.quoted?.sender || args[0]? args[0].replace(/[^0-9]/g, '') + '@s.whatsapp.net' : null
+    // AGARRA TAG O REPLY. SI NO HAY NADA = ERROR
+    let target = m.mentionedJid[0] || m.quoted?.sender || null
 
-    if(!target) return m.reply(`⚡ *USO:*.${command} @tag\n*Ejemplo:*.${command} @${m.sender.split('@')[0]}\n*O:* Responde al mensaje con.${command}`)
+    let cmd = command.toLowerCase()
 
-    let targetName = await getName(target)
-
-    switch(command.toLowerCase()) {
-        case 'miamor': case 'mi amor':
+    switch(cmd) {
+        case 'miamor': case 'miamor': case 'mi amor':
+            if(!target) return m.reply(`⚡ *USO:*.miamor @tag\n*O:* Responde a alguien +.miamor`)
             mentions = [target]
             txt = `${BOX_TOP}
 😈 𝙰𝙼𝙾𝚁 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 😈
 ${BOX_BOT}
 
-│ 💕 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: @${target.split('@')[0]}
-│ 𝙽𝙾𝙼𝙱𝚁𝙴: ${targetName}
+│ 💕 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)}
 │
 │ 𝙽𝙸𝚅𝙴𝙻 𝙳𝙴 𝙰𝙼𝙾𝚁: ${porcentaje}%
 │ 𝙳𝙸𝙰𝙶𝙽𝙾𝚂𝚃𝙸𝙲𝙾: ${porcentaje > 70? 'Almas gemelas' : porcentaje > 40? 'Hay química' : 'Frio como hielo'}
@@ -48,74 +46,74 @@ ${BOX_BOT}`
             break
 
         case 'mibebito':
+            if(!target) return m.reply(`⚡ *USO:*.mibebito @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 🍼 𝙵𝙸𝚄 𝙵𝙸𝚄 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 🍼
 ${BOX_BOT}
 
-│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: @${target.split('@')[0]}
-│ 𝙽𝙾𝙼𝙱𝚁𝙴: ${targetName} 😏
+│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)} 😏
 │ 𝙽𝙸𝚅𝙴𝙻: ${porcentaje}%
 ${BOX_BOT}`
             break
 
         case 'bratz':
+            if(!target) return m.reply(`⚡ *USO:*.bratz @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 💄 𝙱𝚁𝙰𝚃𝚉 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙰 💄
 ${BOX_BOT}
 
-│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: @${target.split('@')[0]}
-│ 𝙽𝙾𝙼𝙱𝚁𝙴: ${targetName}
+│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)}
 │ 𝙽𝙸𝚅𝙴𝙻: ${porcentaje}%
 ${BOX_BOT}`
             break
 
         case 'bellaka':
+            if(!target) return m.reply(`⚡ *USO:*.bellaka @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 💃 𝙱𝙴𝙻𝙰𝙺𝙰 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙰 💃
 ${BOX_BOT}
 
-│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: @${target.split('@')[0]}
-│ 𝙽𝙾𝙼𝙱𝚁𝙴: ${targetName}
+│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)}
 │ 𝙿𝙴𝚁𝙴𝙾: ${porcentaje}%
 ${BOX_BOT}`
             break
 
         case 'brother':
+            if(!target) return m.reply(`⚡ *USO:*.brother @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 👬 𝙵𝚁𝙰𝚂𝙴 𝙿𝙸𝚃𝚄𝙵𝙾 👬
 ${BOX_BOT}
 
-│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: @${target.split('@')[0]}
-│ 𝙽𝙾𝙼𝙱𝚁𝙴: ${targetName}
+│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)}
 │ 𝙳𝙸𝙲𝙴: ${frasesBro[Math.floor(Math.random()*4)]}
 ${BOX_BOT}`
             break
 
-        case 'perroinfiel': case 'perro infiel':
+        case 'perroinfiel': case 'perroinfiel': case 'perro infiel':
+            if(!target) return m.reply(`⚡ *USO:*.perroinfiel @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 🐕 𝙿𝙴𝚁𝙾 𝙸𝙽𝙵𝙸𝙴𝙻 🐕
 ${BOX_BOT}
 
-│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: @${target.split('@')[0]}
-│ 𝙽𝙾𝙼𝙱𝚁𝙴: ${targetName}
+│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)}
 │ 𝙴𝚅𝙸𝙳𝙴𝙽𝙲𝙸𝙰: ${frasesPerro[Math.floor(Math.random()*4)]}
 │ 𝙽𝙸𝚅𝙴𝙻: ${porcentaje}%
 ${BOX_BOT}`
             break
 
-        case 'mentiroso': case 'mentiras':
+        case 'mentiroso': case 'mentiroso': case 'mentiras':
+            if(!target) return m.reply(`⚡ *USO:*.mentiroso @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 🤥 𝙼𝙴𝙽𝚃𝙸𝚁𝙾𝚂𝙾 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 🤥
 ${BOX_BOT}
 
-│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: @${target.split('@')[0]}
-│ 𝙽𝙾𝙼𝙱𝚁𝙴: ${targetName}
+│ 𝙾𝙱𝙹𝙴𝚃𝙸𝚅𝙾: ${jidToTag(target)}
 │ 𝙵𝚁𝙰𝚂𝙴: "Te lo juro por mi mamá"
 │ 𝙽𝙸𝚅𝙴𝙻: ${porcentaje}%
 ${BOX_BOT}`
@@ -129,8 +127,8 @@ ${BOX_BOT}`
 2️⃣ 𝚂𝙸𝚂𝚃𝙴𝙼𝙰 2𝙿2 2️⃣
 ${BOX_BOT}
 
-│ 𝙿𝙰𝚁𝙴𝙹𝙰 1: @${cuatro[0].split('@')[0]} ❤️ @${cuatro[1].split('@')[0]}
-│ 𝙿𝙰𝚁𝙴𝙹𝙰 2: @${cuatro[2].split('@')[0]} ❤️ @${cuatro[3].split('@')[0]}
+│ 𝙿𝙰𝚁𝙴𝙹𝙰 1: ${jidToTag(cuatro[0])} ❤️ ${jidToTag(cuatro[1])}
+│ 𝙿𝙰𝚁𝙴𝙹𝙰 2: ${jidToTag(cuatro[2])} ❤️ ${jidToTag(cuatro[3])}
 │ 𝙲𝙾𝙼𝙿𝙰𝚃𝙸𝙱𝙸𝙻𝙸𝙳𝙰𝙳: ${porcentaje}%
 ${BOX_BOT}`
             break
@@ -143,9 +141,9 @@ ${BOX_BOT}`
 3️⃣ 𝚂𝙸𝚂𝚃𝙴𝙼𝙰 3𝙿3 3️⃣
 ${BOX_BOT}
 
-│ 𝙿1: @${seis[0].split('@')[0]} ❤️ @${seis[1].split('@')[0]}
-│ 𝙿2: @${seis[2].split('@')[0]} ❤️ @${seis[3].split('@')[0]}
-│ 𝙿3: @${seis[4].split('@')[0]} ❤️ @${seis[5].split('@')[0]}
+│ 𝙿1: ${jidToTag(seis[0])} ❤️ ${jidToTag(seis[1])}
+│ 𝙿2: ${jidToTag(seis[2])} ❤️ ${jidToTag(seis[3])}
+│ 𝙿3: ${jidToTag(seis[4])} ❤️ ${jidToTag(seis[5])}
 │ 𝙲𝙾𝙼𝙿𝙰𝚃𝙸𝙱𝙸𝙻𝙸𝙳𝙰𝙳: ${porcentaje}%
 ${BOX_BOT}`
             break
@@ -159,14 +157,11 @@ ${BOX_BOT}`
 👯 𝙳𝚄𝙾 𝚁𝙰𝙽𝙳𝙾𝙼 👯
 ${BOX_BOT}
 
-│ @${dos[0].split('@')[0]} + @${dos[1].split('@')[0]}
+│ ${jidToTag(dos[0])} + ${jidToTag(dos[1])}
 │ ${frase}
 │ 𝙲𝙾𝙼𝙿𝙰𝚃𝙸𝙱𝙸𝙻𝙸𝙳𝙰𝙳: ${porcentaje}%
 ${BOX_BOT}`
             break
-
-        default:
-            return
     }
 
     if(txt) await conn.sendMessage(m.chat, {
@@ -175,7 +170,7 @@ ${BOX_BOT}`
     }, { quoted: m })
 }
 
-handler.help = ['miamor','mibebito','bratz','bellaka','brother','perroinfiel','perro infiel','mentiroso','mentiras','2p2','3p3','duo']
+handler.help = ['miamor','mibebito','bratz','bellaka','brother','perroinfiel','mentiroso','2p2','3p3','duo']
 handler.tags = ['joda']
 handler.command = /^(miamor|mi amor|mibebito|bratz|bellaka|brother|perroinfiel|perro infiel|mentiroso|mentiras|2p2|3p3|duo)$/i
 handler.group = true
