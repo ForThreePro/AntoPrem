@@ -30,17 +30,15 @@ handler.before = async function (m, { conn }) {
         }
     }
 
-    // BANNER DEL GRUPO > BANNER BOT > FOTO USER > DEFAULT
-    let banner = getBotConfig(conn, 'banner')
-    if (!banner) {
+    // SOLO FOTO DEL GRUPO > FOTO DEL USER > DEFAULT
+    let banner;
+    try {
+        banner = await conn.profilePictureUrl(m.chat, 'image')
+    } catch {
         try {
-            banner = await conn.profilePictureUrl(m.chat, 'image')
+            banner = await conn.profilePictureUrl(userss, 'image')
         } catch {
-            try {
-                banner = await conn.profilePictureUrl(userss, 'image')
-            } catch {
-                banner = 'https://i.imgur.com/2wzZ3eB.png'
-            }
+            banner = 'https://i.imgur.com/2wzZ3eB.png'
         }
     }
 
