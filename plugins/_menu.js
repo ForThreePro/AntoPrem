@@ -3,25 +3,25 @@ import os from 'os'
 
 const CATEGORY_META = {
 config: '⚙️ CONFIG',
-main: '💿 MAIN',
-tools: '💿 TOOLS',
+main: '🔧 MAIN',
+tools: '🛠️ TOOLS',
 owner: '👑 OWNER',
-sorteos: '💿 SORTEOS',
-fun: '🎭 FUN',
-ff: '💿 FF',
+sorteos: '🎯 SORTEOS',
+fun: '😈 FUN',
+ff: '🔫 FF',
 buscadores: '🔍 SEARCH',
 descargas: '📥 DOWNLOADER',
-grupo: '💿 GRUPOS',
-grupos: '💿 GRUPO',
+grupo: '⚔️ GRUPOS',
+grupos: '🛡️ GRUPO',
 gacha: '👥 GROUP',
-ia: '💿 INTELIGENCIA ARTIFICIAL',
+ia: '🤖 INTELIGENCIA ARTIFICIAL',
 info: 'ℹ️ INFO',
-sticker: '💿 STICKER',
+sticker: '🎨 STICKER',
 }
 
 let handler = async (m, { conn }) => {
 try {
-await conn.sendMessage(m.chat, { react: { text: '💿', key: m.key } })
+await conn.sendMessage(m.chat, { react: { text: '⚡', key: m.key } })
 
 const fecha = moment.tz('America/Lima').format('dddd')
 const fecha2 = moment.tz('America/Lima').format('DD [de] MMMM [de] YYYY')
@@ -33,6 +33,7 @@ const segundos = Math.floor(uptime % 60)
 const ram = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)
 const totalram = (os.totalmem() / 1024 / 1024 / 1024).toFixed(2)
 const pluginsCount = Object.values(global.plugins || {}).filter(p =>!p?.disabled).length
+const totalUsers = Object.keys(global.db.data.users || {}).length
 
 const byTag = {}
 for (const plugin of Object.values(global.plugins || {})) {
@@ -49,23 +50,24 @@ for (const plugin of Object.values(global.plugins || {})) {
 const userName = m.pushName || 'Usuario'
 const IMG_MENU = 'https://d.uguu.se/hNMqwsKZ.jpg'
 
-let menuTexto = `ᯇ *Cyber Bot* 🥥 ୧
+let menuTexto = `⚡ *CYBER BOT* 🔥 ୨
 
- ⤷ ┇ *Cyber Dice: version* ﹒ 3.0 Cyber Neon ：✿ 。
-꒰ ◞⁺⊹ ．online • ${horas}h ${minutos}m ${segundos}s
+ ⤷ ┇ *SYSTEM:* v3.0 Cyber ：✦ 。
+╰─ ◈ online • ${horas}h ${minutos}m ${segundos}s
 
- ꒱ ׁ. ᘏ *usuario* ׅ 𝆬
-🐆 @${userName} 🌻 ࣪ ꕀ ˚
-> *"sistema conectado, domina el chat"*
+ ╭─「 👤 USUARIO 」─╮
+│ 💀 @${userName}
+│ 💬 "Conectado. Listo para dominar"
+╰────────────────╯
 
-──愛 *ESTADISTICAS* ╏ 📊
-👥 usuarios: ${Object.keys(global.db.data.users).length} | 📜 comandos: ${pluginsCount}
-💾 ram: ${ram}mb | 🌐 servidor: ${totalram}gb
+──⚡ *ESTADÍSTICAS* ╏ 📊
+👥 Usuarios: ${totalUsers} | 📜 Comandos: ${pluginsCount}
+💾 RAM: ${ram}mb | 🌐 Servidor: ${totalram}gb
 
-──💿 *SISTEMA* 💿──
+──🔧 *SISTEMA* 🔧──
 📅 ${fecha}
 📆 ${fecha2}
-🕐 ${hora} | 📡 ping: ${Math.round(performance.now())}ms
+🕐 ${hora} | 📡 Ping: ${Math.round(performance.now())}ms
 
 `
 
@@ -74,28 +76,33 @@ for (const tag of Object.keys(CATEGORY_META)) {
   if (!set || set.size === 0) continue
   const cmds = [...set].sort()
 
-  let icono = '💿'
+  let icono = '🔧'
   if(tag === 'config') icono = '⚙️'
   if(tag === 'owner') icono = '👑'
-  if(tag === 'fun') icono = '🎭'
+  if(tag === 'fun') icono = '😈'
+  if(tag === 'ff') icono = '🔫'
   if(tag === 'buscadores') icono = '🔍'
   if(tag === 'descargas') icono = '📥'
+  if(tag === 'grupo') icono = '⚔️'
+  if(tag === 'grupos') icono = '🛡️'
   if(tag === 'gacha') icono = '👥'
+  if(tag === 'ia') icono = '🤖'
   if(tag === 'info') icono = 'ℹ️'
+  if(tag === 'sticker') icono = '🎨'
 
-  menuTexto += `.⃟𖥔 ݁💿𖦹˙— \`${CATEGORY_META[tag].split(' ')[1]}\` —˙𖦹💿${icono}꒷\n`
-  menuTexto += cmds.map(c => ` ${icono} ➛.${c}`).join('\n') + '\n'
-  menuTexto += ` ㅤ└──.✦ ── ⊰ ̟!!.✦. ˙\n\n`
+  menuTexto += `╭─「 ${CATEGORY_META[tag]} 」─╮\n`
+  menuTexto += cmds.map(c => `│ ${icono}.${c}`).join('\n') + '\n'
+  menuTexto += `╰─────────────────╯\n\n`
 }
 
-menuTexto += `💿━━━━━━━━
-🥥 *BOT:* CYBER BOT
-🐆 *Creador:* Whois Yallico 👑
-💿 *Version:* 3.0 Cyber Neon
-🌐 *Web:* github.com
+menuTexto += `⚡━━━━━━━━━━━━━━━⚡
+🔥 *BOT:* CYBER BOT
+💀 *CREADOR:* Whois Yallli co 👑
+⚡ *VERSION:* 3.0 Cyber Masculino
+🌐 *WEB:* github.com
 
-> *"sistema conectado, domina el chat"* 🪩
-💿━━━━━━━━`
+> "Conectado al sistema. Domina o muere" ⚡
+⚡━━━━━━━━━━━━━━━⚡`
 
 await conn.sendMessage(m.chat, {
   image: { url: IMG_MENU },
@@ -104,7 +111,7 @@ await conn.sendMessage(m.chat, {
 }, { quoted: m })
 
 } catch (e) {
-await conn.sendMessage(m.chat, { text: `❌ *Error:* ${e.message}` }, { quoted: m })
+await conn.sendMessage(m.chat, { text: `❌ *SYSTEM ERROR:* ${e.message}` }, { quoted: m })
 }
 }
 
