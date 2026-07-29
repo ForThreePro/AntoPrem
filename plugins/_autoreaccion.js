@@ -1,65 +1,64 @@
 let handler = (m) => m;
 
 handler.before = async function (m, { conn, isAdmin, isBotAdmin, isOwner }) {
-  if (m.isGroup && !isBotAdmin) return;
+  if (!m.isGroup || !isBotAdmin) return; // solo grupos y si el bot es admin
 
-  
   const chat = global.db.data.chats[m.chat];
-  if (!chat.reaction) return; 
+  if (!chat.reaction) return; // si está desactivado
 
   if (!m.text) return;
 
   const emojiResponses = {
-    "hola": "👋",
-    "gracias": "🙏",
-    "adiós": "👋",
-    "jaja": "😂",
-    "triste": "😢",
-    "genial": "😎",
-    "amor": "❤️",
-    "ok": "👌",
-    "wow": "😮",
-    "ayuda": "❓",
-    "bien": "😊",
-    "mal": "😞",
-    "feliz": "😁",
-    "sí": "✅",
-    "no": "❌",
-    "comida": "🍕",
-    "fiesta": "🎉",
-    "musica": "🎵",
-    "dinero": "💵",
+    "hola": "👋", "buenas": "👋",
+    "gracias": "🙏", "thx": "🙏",
+    "adiós": "👋", "chau": "👋", "bye": "👋",
+    "jaja": "😂", "xd": "😂", "lol": "😂",
+    "triste": "😢", "sad": "😢",
+    "genial": "😎", "god": "😎",
+    "amor": "❤️", "love": "❤️",
+    "ok": "👌", "dale": "👌",
+    "wow": "😮", "wtf": "😮",
+    "ayuda": "❓", "help": "❓",
+    "bien": "😊", "good": "😊",
+    "mal": "😞", "bad": "😞",
+    "feliz": "😁", "happy": "😁",
+    "sí": "✅", "si": "✅", "yes": "✅",
+    "no": "❌", "nop": "❌",
+    "comida": "🍕", "hambre": "🍕",
+    "fiesta": "🎉", "party": "🎉",
+    "musica": "🎵", "music": "🎵",
+    "dinero": "💵", "plata": "💵",
     "trabajo": "💼",
-    "casa": "🏠",
-    "sol": "☀️",
-    "lluvia": "🌧️",
+    "casa": "🏠", "home": "🏠",
+    "sol": "☀️", "calor": "☀️",
+    "lluvia": "🌧️", "frio": "🌧️",
     "noche": "🌙",
     "estrella": "⭐",
-    "fuego": "🔥",
+    "fuego": "🔥", "hot": "🔥",
     "agua": "💧",
-    "corazón": "💖",
+    "corazón": "💖", "corazon": "💖",
     "beso": "💋",
     "abrazo": "🤗",
     "tiempo": "⏰",
-    "café": "☕",
+    "café": "☕", "cafe": "☕",
     "idea": "💡",
     "regalo": "🎁",
     "carro": "🚗",
     "viaje": "✈️",
-    "teléfono": "📱",
-    "computadora": "💻",
+    "teléfono": "📱", "telefono": "📱",
+    "computadora": "💻", "pc": "💻",
     "error": "❗",
-    "robot": "🤖",
-    "estrella fugaz": "🌠",
+    "robot": "🤖", "bot": "🤖",
     "flor": "🌸",
-    "árbol": "🌳",
-    "montaña": "⛰️",
-    "mar": "🌊",
+    "árbol": "🌳", "arbol": "🌳",
+    "montaña": "⛰️", "montana": "⛰️",
+    "mar": "🌊", "playa": "🌊",
   };
 
   const lowerMessage = m.text.toLowerCase();
   let emojiToReact = null;
 
+  // Busca la primera palabra clave que encuentre
   for (const [key, emoji] of Object.entries(emojiResponses)) {
     if (lowerMessage.includes(key)) {
       emojiToReact = emoji;
@@ -67,18 +66,17 @@ handler.before = async function (m, { conn, isAdmin, isBotAdmin, isOwner }) {
     }
   }
 
-  if (!emojiToReact) {
-    const allEmojis = [
-      "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇", "🙂", "🙃", "😉", "😌",
-      "😍", "🥰", "😘", "😗", "😙", "😚", "😋", "😛", "😜", "🤪", "😝", "🤑", "🤗", "🤭",
-      "🤫", "🤔", "🤐", "🤨", "😐", "😑", "😶", "😏", "😒", "🙄", "😬", "🤥", "😌", "😔",
-    ];
+  // Si no encontró nada, 30% de probabilidad de reaccionar random
+  if (!emojiToReact && Math.random() < 0.3) {
+    const allEmojis = ["😀", "😃", "😄", "😁", "😆", "😂", "🤣", "😊", "😇", "😉", "😍", "🥰", "😘", "🤗", "🤔", "😌", "😏", "🔥", "💯", "✨"];
     emojiToReact = allEmojis[Math.floor(Math.random() * allEmojis.length)];
   }
 
+  if (!emojiToReact) return; // si no hay nada que hacer, no hace nada
+
   try {
     await m.react(emojiToReact);
-    console.log("✰ Reaccionado con:", emojiToReact);
+    console.log(`✰ [REACTION] ${m.chat.split('@')[0]} → ${emojiToReact}`);
   } catch (err) {
     console.error("❏ Error al reaccionar:", err);
   }
@@ -86,4 +84,5 @@ handler.before = async function (m, { conn, isAdmin, isBotAdmin, isOwner }) {
   return true;
 };
 
+handler.disabled = false;
 export default handler;
