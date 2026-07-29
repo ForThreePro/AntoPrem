@@ -12,17 +12,44 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isROwner, 
     const isGroupLink = linkRegex.exec(m.text) || linkRegex1.exec(m.text);
 
     if (chat.antiLink && isGroupLink && !isAdmin) {
+        // SI EL LINK ES DEL MISMO GRUPO NO HACE NADA
         if (isBotAdmin) {
             const linkThisGroup = `https://chat.whatsapp.com/${await this.groupInviteCode(m.chat).catch(() => "")}`;
             if (m.text.includes(linkThisGroup)) return !0;
         }
 
-        await conn.sendMessage(m.chat, { text: `*「 ENLACE DETECTADO 」*\n\n《✧》${user} Rompiste las reglas del Grupo serás eliminado...`, mentions: [m.sender] }, { quoted: m });
+        // AVISO CYBER
+        await conn.sendMessage(m.chat, { 
+            text: `
+╔═══「 🚨 𝐀𝐍𝐓𝐈𝐋𝐈𝐍𝐊 」═══╗
+║
+║ 𝗗𝗘𝗧𝗘𝗖𝗧𝗔𝗗𝗢 : Enlace Prohibido
+║ 𝗨𝗦𝗨𝗔𝗥𝗜𝗢 : ${user}
+║ 𝗘𝗦𝗧𝗔𝗗𝗢 : ⚠️ Eliminando...
+║
+╚═══════════╝
 
+> 𝙻𝚘𝚜 𝚎𝚗𝚕𝚊𝚌𝚎𝚜 𝚎𝚜𝚝𝚊𝚗 𝚙𝚛𝚘𝚑𝚒𝚋𝚒𝚍𝚘𝚜
+`.trim(), 
+            mentions: [m.sender] 
+        }, { quoted: m });
+
+        // SI NO ES ADMIN EL BOT
         if (!isBotAdmin) {
-            return conn.sendMessage(m.chat, { text: `《✧》 El antilink está activo pero no puedo eliminarte porque no soy admin.`, mentions: groupAdmins.map(v => v.id) }, { quoted: m });
+            return conn.sendMessage(m.chat, { 
+                text: `
+╔═══「 ⚠️ 𝐄𝐑𝐑𝐎𝐑 」═══╗
+║
+║ No tengo permisos para eliminar
+║ Activenme como Admin
+║
+╚═══════════╝
+`.trim(), 
+                mentions: groupAdmins.map(v => v.id) 
+            }, { quoted: m });
         }
 
+        // ELIMINAR Y KICK
         if (isBotAdmin) {
             await conn.sendMessage(m.chat, { delete: m.key });
             await conn.groupParticipantsUpdate(m.chat, [m.sender], "remove");
