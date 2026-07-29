@@ -12,6 +12,7 @@ let handler = async (m, { conn, command, text }) => {
     const frasesBro = ['"Oe mano pásame 5 soles"','"Ya pe no seas malo"','"Después te pago juro"','"Invítame una gaseosa"']
     const frasesPerro = ['Te dice "amor" y a 3 más también','Huele a cuernos','Te deja en visto','Sube historias sin ti']
 
+    // RANDOM SIN REPETIR
     function getRandomUsers(cantidad) {
         let shuffled = [...users].sort(() => 0.5 - Math.random())
         return shuffled.slice(0, cantidad)
@@ -21,7 +22,6 @@ let handler = async (m, { conn, command, text }) => {
         return '@' + jid.split('@')[0]
     }
 
-    // FIX: BUSCAR EL JID POR NOMBRE ESCRITO
     function findUserByName(name) {
         name = name.toLowerCase().replace('@','')
         return users.find(u => {
@@ -33,18 +33,20 @@ let handler = async (m, { conn, command, text }) => {
     let txt = ''
     let mentions = []
 
-    // 1. TAG REAL 2. REPLY 3. BUSCAR POR TEXTO
+    // SOLO PARA COMANDOS DE 1 PERSONA
     let target = m.mentionedJid[0] || m.quoted?.sender
-    if(!target && text) {
-        let possibleName = text.split(' ')[0] // agarra la primera palabra despues del comando
+    if(!target && text &&!['2p2','3p3','duo'].includes(command.toLowerCase())) {
+        let possibleName = text.split(' ')[0]
         target = findUserByName(possibleName)
     }
 
-    if(!target) return m.reply(`⚡ *USO:*.${command} @tag\n*Ejemplo:*.${command} @Juan\n*O:* Responde a alguien +.${command}`)
+    if(!target &&!['2p2','3p3','duo'].includes(command.toLowerCase()))
+        return m.reply(`⚡ *USO:*.${command} @tag\n*Ejemplo:*.${command} @Juan\n*O:* Responde a alguien +.${command}`)
 
     let cmd = command.toLowerCase().replace(' ','') // quita espacios
 
     switch(cmd) {
+        // ========== FLIRT ==========
         case 'miamor':
             mentions = [target]
             txt = `${BOX_TOP}
@@ -91,6 +93,7 @@ ${BOX_BOT}
 ${BOX_BOT}`
             break
 
+        // ========== TROLO ==========
         case 'brother':
             mentions = [target]
             txt = `${BOX_TOP}
@@ -126,8 +129,9 @@ ${BOX_BOT}
 ${BOX_BOT}`
             break
 
-        case '2p2':
-            if(users.length < 4) return m.reply('⚡ Mínimo 4 personas')
+        // ========== GRUPALES RANDOM ==========
+        case '2p2': // 4 PERSONAS = 2 PAREJAS
+            if(users.length < 4) return m.reply('⚡ Mínimo 4 personas en el grupo')
             let cuatro = getRandomUsers(4)
             mentions = cuatro
             txt = `${BOX_TOP}
@@ -136,27 +140,29 @@ ${BOX_BOT}
 
 │ 𝙿𝙰𝚁𝙴𝙹𝙰 1: ${jidToTag(cuatro[0])} ❤️ ${jidToTag(cuatro[1])}
 │ 𝙿𝙰𝚁𝙴𝙹𝙰 2: ${jidToTag(cuatro[2])} ❤️ ${jidToTag(cuatro[3])}
-│ 𝙲𝙾𝙼𝙿𝙰𝚃𝙸𝙱𝙸𝙻𝙸𝙳𝙰𝙳: ${porcentaje}%
+│
+│ 𝙲𝙾𝙼𝙿𝙰𝚃𝙸𝙱𝙸𝙻𝙸𝙳𝙰𝙳 𝙳𝙴𝙻 𝙶𝚁𝚄𝙿𝙾: ${porcentaje}%
 ${BOX_BOT}`
             break
 
-        case '3p3':
-            if(users.length < 6) return m.reply('⚡ Mínimo 6 personas')
+        case '3p3': // 6 PERSONAS = 3 PAREJAS
+            if(users.length < 6) return m.reply('⚡ Mínimo 6 personas en el grupo')
             let seis = getRandomUsers(6)
             mentions = seis
             txt = `${BOX_TOP}
 3️⃣ 𝚂𝙸𝚂𝚃𝙴𝙼𝙰 3𝙿3 3️⃣
 ${BOX_BOT}
 
-│ 𝙿1: ${jidToTag(seis[0])} ❤️ ${jidToTag(seis[1])}
-│ 𝙿2: ${jidToTag(seis[2])} ❤️ ${jidToTag(seis[3])}
-│ 𝙿3: ${jidToTag(seis[4])} ❤️ ${jidToTag(seis[5])}
-│ 𝙲𝙾𝙼𝙿𝙰𝚃𝙸𝙱𝙸𝙻𝙸𝙳𝙰𝙳: ${porcentaje}%
+│ 𝙿𝙰𝚁𝙴𝙹𝙰 1: ${jidToTag(seis[0])} ❤️ ${jidToTag(seis[1])}
+│ 𝙿𝙰𝚁𝙴𝙹𝙰 2: ${jidToTag(seis[2])} ❤️ ${jidToTag(seis[3])}
+│ 𝙿𝙰𝚁𝙴𝙹𝙰 3: ${jidToTag(seis[4])} ❤️ ${jidToTag(seis[5])}
+│
+│ 𝙲𝙾𝙼𝙿𝙰𝚃𝙸𝙱𝙸𝙻𝙸𝙳𝙰𝙳 𝙳𝙴𝙻 𝙶𝚁𝚄𝙿𝙾: ${porcentaje}%
 ${BOX_BOT}`
             break
 
-        case 'duo':
-            if(users.length < 2) return m.reply('⚡ Mínimo 2 personas')
+        case 'duo': // 2 PERSONAS = 1 PAREJA
+            if(users.length < 2) return m.reply('⚡ Mínimo 2 personas en el grupo')
             let dos = getRandomUsers(2)
             mentions = dos
             let frase = frasesDuo[Math.floor(Math.random() * frasesDuo.length)]
@@ -165,15 +171,20 @@ ${BOX_BOT}`
 ${BOX_BOT}
 
 │ ${jidToTag(dos[0])} + ${jidToTag(dos[1])}
+│
 │ ${frase}
+│
 │ 𝙲𝙾𝙼𝙿𝙰𝚃𝙸𝙱𝙸𝙻𝙸𝙳𝙰𝙳: ${porcentaje}%
 ${BOX_BOT}`
             break
+
+        default:
+            return
     }
 
     if(txt) await conn.sendMessage(m.chat, {
         text: txt,
-        mentions: mentions
+        mentions: mentions // SOLO ETIQUETA A LOS QUE SALIERON
     }, { quoted: m })
 }
 
