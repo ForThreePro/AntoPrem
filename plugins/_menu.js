@@ -82,7 +82,7 @@ menuTexto += `│ ⏰ 𝙷𝚘𝚛𝚊: ${hora}\n`
 menuTexto += `│ 📦 𝙿𝚕𝚞𝚐𝚒𝚗𝚜: ${pluginsCount}\n`
 menuTexto += `│ 👨‍💻 𝙲𝚛𝚎𝚊𝚍𝚘𝚛: Whois Yallico\n`
 menuTexto += `╰───────────────────╯\n\n`
-menuTexto += `🔗 𝙲𝚊𝚗𝚊𝚕: https://whatsapp.com/channel/0029Vb7h1qC65yDEhghegc2O\n\n`
+menuTexto += `🔗 𝙲𝚊𝚗𝚊𝚕: https://whatsapp.com/channel/0029Vb8emrOJuyACodGSbP0z\n\n`
 
 for (const tag of Object.keys(CATEGORY_META)) {
   const set = byTag[tag]
