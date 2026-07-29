@@ -1,4 +1,4 @@
-let handler = async (m, { conn, command, args }) => {
+let handler = async (m, { conn, command, args }) => { // AQUI FALTABA args
     if(!m.isGroup) return m.reply('⚡ Solo funciona en grupos')
 
     let metadata = await conn.groupMetadata(m.chat)
@@ -164,6 +164,9 @@ ${BOX_BOT}
 │ 𝙲𝙾𝙼𝙿𝙰𝚃𝙸𝙱𝙸𝙻𝙸𝙳𝙰𝙳: ${porcentaje}%
 ${BOX_BOT}`
             break
+
+        default:
+            return
     }
 
     if(txt) await conn.sendMessage(m.chat, {
