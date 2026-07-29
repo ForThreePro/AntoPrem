@@ -17,7 +17,7 @@ handler.before = async function (m, { conn }) {
     const realSender = realSenderRaw?.includes('@')? realSenderRaw : null
 
     const userTag = `@${userss.split('@')[0]}`
-    const adminTag = realSender? `@${realSender.split('@')[0]}` : 'SISTEMA'
+    const adminTag = realSender? `@${realSender.split('@')[0]}` : 'SYSTEM'
 
     const mentions = [userss]
     if (realSender) mentions.push(realSender)
@@ -25,65 +25,68 @@ handler.before = async function (m, { conn }) {
     const context = {
         contextInfo: {
             mentionedJid: mentions,
-            isForwarded: true
+            isForwarded: true,
+            forwardingScore: 999
         }
     }
 
-    // DISEÑO NUEVO CYBER MASCULINO
+    // BANNER DEL GRUPO O DEFAULT
+    let banner = getBotConfig(conn, 'banner') || 'https://i.imgur.com/2wzZ3eB.png'
+
+    // DISEÑO CYBER PROMOTE
     const admingp = `
-⚡━━━━━━━━━━━━━━━⚡
-👑 𝙽𝚄𝙴𝚅𝙾 𝙰𝙳𝙼𝙸𝙽 𝙰𝚂𝙸𝙶𝙽𝙰𝙳𝙾 👑
-⚡━━━━━━━━━━━━━━━⚡
+╔═══「 👑 𝐀𝐒𝐂𝐄𝐍𝐒𝐎 」═══╗
+║
+║ 𝗧𝗔𝗥𝗚𝗘𝗧 : ${userTag}
+║ 𝗦𝗧𝗔𝗧𝗨𝗦 : ✅ RANGO ASIGNADO
+║ 𝗕𝗬 : ${adminTag}
+║
+╠═══「 𝗣𝗘𝗥𝗠𝗜𝗦𝗢𝗦 」═══╣
+║ [✓] Expulsar / Promover
+║ [✓] Editar Info Grupo
+║ [✓] Cambiar Config
+║ [✓] Anuncios
+╚═══════════╝
 
-💀 𝚄𝚂𝚄𝙰𝚁𝙸𝙾: ${userTag}
-⚡ 𝙴𝚂𝚃𝙰𝙳𝙾: Rango Ascendido
-
-🛡️ 𝙰𝚄𝚃𝙾𝚁𝙸𝚉𝙰𝙳𝙾 𝙿𝙾𝚁: ${adminTag}
-
-╭─「 𝙿𝙾𝙳𝙴𝚁𝙴𝚂 𝙰𝙲𝚃𝙸𝚅𝙰𝙳𝙾𝚂 」─╮
-│ 🔧 Kick / Promote / Demote
-│ 🛡️ Editar info del grupo
-│ 📢 Anuncios y Config
-╰───────────────────╯
-
-> "El poder conlleva responsabilidad"
+> 𝙴𝚕 𝚙𝚘𝚍𝚎𝚛 𝚌𝚘𝚗𝚕𝚎𝚟𝚊 𝚛𝚎𝚜𝚙𝚘𝚗𝚜𝚊𝚋𝚒𝚕𝚒𝚍𝚊𝚍
 `.trim()
 
+    // DISEÑO CYBER DEMOTE
     const noadmingp = `
-⚡━━━━━━━━━━━━━━━⚡
-🔒 𝙰𝙳𝙼𝙸𝙽 𝙳𝙴𝙶𝚁𝙰𝙳𝙰𝙳𝙾 🔒
-⚡━━━━━━━━━━━━━━━⚡
+╔═══「 🔒 𝐃𝐄𝐒𝐂𝐄𝐍𝐒𝐎 」═══╗
+║
+║ 𝗧𝗔𝗥𝗚𝗘𝗧 : ${userTag}
+║ 𝗦𝗧𝗔𝗧𝗨𝗦 : ❌ RANGO REVOCADO
+║ 𝗕𝗬 : ${adminTag}
+║
+╠═══「 𝗔𝗖𝗖𝗘𝗦𝗢 𝗗𝗘𝗡𝗘𝗚𝗔𝗗𝗢 」═══╣
+║ [✗] Sin permisos de admin
+║ [✗] Comandos bloqueados
+║ [✗] Solo miembro
+╚═════════╝
 
-❌ 𝚄𝚂𝚄𝙰𝚁𝙸𝙾: ${userTag}
-⚠️ 𝙴𝚂𝚃𝙰𝙳𝙾: Rango Revocado
-
-🛡️ 𝙰𝙲𝙲𝙸𝙾𝙽 𝙿𝙾𝚁: ${adminTag}
-
-╭─「 𝙿𝙴𝚁𝙼𝙸𝚂𝙾𝚂 𝚁𝙴𝚅𝙾𝙲𝙰𝙳𝙾𝚂 」─╮
-│ ❌ Ya no puede administrar
-│ ❌ Acceso denegado a comandos
-╰──────────────────────╯
-
-> "Sin rango, sin poder"
+> 𝚂𝚒𝚗 𝚛𝚊𝚗𝚐𝚘, 𝚜𝚒𝚗 𝚙𝚘𝚍𝚎𝚛
 `.trim()
 
     // LIMPIAR SESSION SI KICKEAN BOT
     if (chat.detect && m.messageStubType == 2) {
         const uniqid = (m.isGroup? m.chat : m.sender).split('@')[0]
         const sessionPath = `./sessions/`
-        for (const file of await fs.readdir(sessionPath)) {
-            if (file.includes(uniqid)) {
-                await fs.unlink(path.join(sessionPath, file))
+        try {
+            for (const file of await fs.readdir(sessionPath)) {
+                if (file.includes(uniqid)) {
+                    await fs.unlink(path.join(sessionPath, file))
+                }
             }
-        }
+        } catch {}
     }
 
     // PROMOTE
     if (chat.alerts && m.messageStubType == 29) {
         await conn.sendMessage(m.chat, {
-            image: { url: getBotConfig(conn, 'banner') },
+            image: { url: banner },
             caption: admingp,
-           ...context
+          ...context
         }, { quoted: null })
         return
     }
@@ -91,9 +94,9 @@ handler.before = async function (m, { conn }) {
     // DEMOTE
     if (chat.alerts && m.messageStubType == 30) {
         await conn.sendMessage(m.chat, {
-            image: { url: getBotConfig(conn, 'banner') },
+            image: { url: banner },
             caption: noadmingp,
-           ...context
+          ...context
         }, { quoted: null })
         return
     }
