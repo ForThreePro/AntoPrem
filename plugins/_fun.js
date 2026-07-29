@@ -1,4 +1,4 @@
-let handler = async (m, { conn, command }) => {
+let handler = async (m, { conn, command, args }) => {
     if(!m.isGroup) return m.reply('⚡ Solo funciona en grupos')
 
     let metadata = await conn.groupMetadata(m.chat)
@@ -24,14 +24,14 @@ let handler = async (m, { conn, command }) => {
     let txt = ''
     let mentions = []
 
-    // SOLO AGARRA EL TAG, SI NO HAY TAG = ERROR
-    let target = m.mentionedJid && m.mentionedJid[0]? m.mentionedJid[0] : m.quoted?.sender || null
+    // FIX: AGARRA TAG, REPLY O NUMERO
+    let target = m.mentionedJid[0] || m.quoted?.sender || args[0]? args[0].replace(/[^0-9]/g, '') + '@s.whatsapp.net' : null
+
+    if(!target) return m.reply(`⚡ *USO:*.${command} @tag\n*Ejemplo:*.${command} @${m.sender.split('@')[0]}\n*O:* Responde al mensaje de alguien con.${command}`)
 
     switch(command.toLowerCase()) {
-        // ========== FLIRT - SOLO ETIQUETA AL TARGET ==========
         case 'miamor': case 'mi amor':
-            if(!target) return m.reply(`⚡ *USO:*.miamor @tag\n*Ejemplo:*.miamor @${m.sender.split('@')[0]}`)
-            mentions = [target] // SOLO EL
+            mentions = [target]
             txt = `${BOX_TOP}
 😈 𝙰𝙼𝙾𝚁 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 😈
 ${BOX_BOT}
@@ -44,7 +44,6 @@ ${BOX_BOT}`
             break
 
         case 'mibebito':
-            if(!target) return m.reply(`⚡ *USO:*.mibebito @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 🍼 𝙵𝙸𝚄 𝙵𝙸𝚄 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 🍼
@@ -56,7 +55,6 @@ ${BOX_BOT}`
             break
 
         case 'bratz':
-            if(!target) return m.reply(`⚡ *USO:*.bratz @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 💄 𝙱𝚁𝙰𝚃𝚉 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙰 💄
@@ -68,7 +66,6 @@ ${BOX_BOT}`
             break
 
         case 'bellaka':
-            if(!target) return m.reply(`⚡ *USO:*.bellaka @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 💃 𝙱𝙴𝙻𝙰𝙺𝙰 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙰 💃
@@ -79,9 +76,7 @@ ${BOX_BOT}
 ${BOX_BOT}`
             break
 
-        // ========== TROLO ==========
         case 'brother':
-            if(!target) return m.reply(`⚡ *USO:*.brother @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 👬 𝙵𝚁𝙰𝚂𝙴 𝙿𝙸𝚃𝚄𝙵𝙾 👬
@@ -93,7 +88,6 @@ ${BOX_BOT}`
             break
 
         case 'perroinfiel': case 'perro infiel':
-            if(!target) return m.reply(`⚡ *USO:*.perroinfiel @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 🐕 𝙿𝙴𝚁𝙾 𝙸𝙽𝙵𝙸𝙴𝙻 🐕
@@ -106,7 +100,6 @@ ${BOX_BOT}`
             break
 
         case 'mentiroso': case 'mentiras':
-            if(!target) return m.reply(`⚡ *USO:*.mentiroso @tag`)
             mentions = [target]
             txt = `${BOX_TOP}
 🤥 𝙼𝙴𝙽𝚃𝙸𝚁𝙾𝚂𝙾 𝙳𝙴𝚃𝙴𝙲𝚃𝙰𝙳𝙾 🤥
@@ -118,11 +111,10 @@ ${BOX_BOT}
 ${BOX_BOT}`
             break
 
-        // ========== GRUPALES - RANDOM ==========
         case '2p2':
             if(users.length < 4) return m.reply('⚡ Mínimo 4 personas')
             let cuatro = getRandomUsers(4)
-            mentions = cuatro // solo los 4 random
+            mentions = cuatro
             txt = `${BOX_TOP}
 2️⃣ 𝚂𝙸𝚂𝚃𝙴𝙼𝙰 2𝙿2 2️⃣
 ${BOX_BOT}
@@ -151,7 +143,7 @@ ${BOX_BOT}`
         case 'duo':
             if(users.length < 2) return m.reply('⚡ Mínimo 2 personas')
             let dos = getRandomUsers(2)
-            mentions = dos // solo el duo random
+            mentions = dos
             let frase = frasesDuo[Math.floor(Math.random() * frasesDuo.length)]
             txt = `${BOX_TOP}
 👯 𝙳𝚄𝙾 𝚁𝙰𝙽𝙳𝙾𝙼 👯
@@ -166,7 +158,7 @@ ${BOX_BOT}`
 
     if(txt) await conn.sendMessage(m.chat, {
         text: txt,
-        mentions: mentions // SOLO ETIQUETA A LOS DE mentions
+        mentions: mentions
     }, { quoted: m })
 }
 
