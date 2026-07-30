@@ -38,43 +38,45 @@ handler.before = async function (m, { conn }) {
         try {
             banner = await conn.profilePictureUrl(m.chat, 'image')
         } catch {
-            banner = 'https://i.imgur.com/2wzZ3eB.png'
+            banner = 'https://files.evogb.win/raPUZJ.jpg' // NUEVO LINK
         }
     }
 
-    // DISEÑO CYBER PROMOTE
+    // DISEÑO ANTITOP PROMOTE
     const admingp = `
-╔═══「 👑 𝐀𝐒𝐂𝐄𝐍𝐒𝐎 」═══╗
-║
-║ 𝗧𝗔𝗥𝗚𝗘𝗧 : ${userTag}
-║ 𝗦𝗧𝗔𝗧𝗨𝗦 : ✅ RANGO ASIGNADO
-║ 𝗕𝗬 : ${adminTag}
-║
-╠═══「 𝗣𝗘𝗥𝗠𝗜𝗦𝗢𝗦 」═══╣
-║ [✓] Expulsar / Promover
-║ [✓] Editar Info Grupo
-║ [✓] Cambiar Config
-║ [✓] Anuncios
-╚═══════════╝
+╭─💖 *『 𝗔𝗦𝗖𝗘𝗡𝗦𝗢 』* 💖─╮
+│
+│ 👑 *Target:* ${userTag}
+│ ✨ *Status:* Rango asignado
+│ 💕 *Por:* ${adminTag}
+│
+├─ *PERMISOS*
+│ [✓] Expulsar / Promover
+│ [✓] Editar Info Grupo
+│ [✓] Cambiar Config
+│ [✓] Anuncios
+│
+╰─────────────────💖
 
-> 𝙴𝚕 𝚙𝚘𝚍𝚎𝚛 𝚌𝚘𝚗𝚕𝚎𝚟𝚊 𝚛𝚎𝚜𝚙𝚘𝚗𝚜𝚊𝚋𝚒𝚕𝚒𝚍𝚊𝚍
+> *“El poder conlleva responsabilidad bb”*
 `.trim()
 
-    // DISEÑO CYBER DEMOTE
+    // DISEÑO ANTITOP DEMOTE
     const noadmingp = `
-╔═══「 🔒 𝐃𝐄𝐒𝐂𝐄𝐍𝐒𝐎 」═══╗
-║
-║ 𝗧𝗔𝗥𝗚𝗘𝗧 : ${userTag}
-║ 𝗦𝗧𝗔𝗧𝗨𝗦 : ❌ RANGO REVOCADO
-║ 𝗕𝗬 : ${adminTag}
-║
-╠═══「 𝗔𝗖𝗘𝗦𝗢 𝗗𝗘𝗡𝗘𝗚𝗔𝗗𝗢 」═══╣
-║ [✗] Sin permisos de admin
-║ [✗] Comandos bloqueados
-║ [✗] Solo miembro
-╚═════════╝
+╭─💖 *『 𝗗𝗘𝗦𝗖𝗘𝗡𝗦𝗢 』* 💖─╮
+│
+│ 🔒 *Target:* ${userTag}
+│ 😿 *Status:* Rango revocado
+│ 💕 *Por:* ${adminTag}
+│
+├─ *ACCESO DENEGADO*
+│ [✗] Sin permisos de admin
+│ [✗] Comandos bloqueados
+│ [✗] Solo miembro
+│
+╰─────────────────💖
 
-> 𝚂𝚒𝚗 𝚛𝚊𝚗𝚐𝚘, 𝚜𝚒𝚗 𝚙𝚘𝚍𝚎𝚛
+> *“Sin rango, pero seguimos siendo amigas”*
 `.trim()
 
     // LIMPIAR SESSION SI KICKEAN BOT
@@ -95,7 +97,7 @@ handler.before = async function (m, { conn }) {
         await conn.sendMessage(m.chat, {
             image: { url: banner },
             caption: admingp,
-       ...context
+      ...context
         }, { quoted: null })
         return
     }
@@ -105,7 +107,7 @@ handler.before = async function (m, { conn }) {
         await conn.sendMessage(m.chat, {
             image: { url: banner },
             caption: noadmingp,
-       ...context
+      ...context
         }, { quoted: null })
         return
     }
