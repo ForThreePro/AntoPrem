@@ -5,43 +5,43 @@ import { fileTypeFromBuffer } from "file-type"
 let handler = async (m, { conn }) => {
   let q = m.quoted ? m.quoted : m
   let mime = (q.msg || q).mimetype || ''
-  if (!mime) return conn.reply(m.chat, `╭─❒ *『 𝗖𝗬𝗕𝗘𝗥 𝗕𝗢𝗧 』* ❒
-│ ⚠️ *ERROR DE SISTEMA*
+  if (!mime) return conn.reply(m.chat, `╭─💖 *『 𝗔𝗡𝗧𝗜𝗧𝗢𝗣 𝗕𝗢𝗧 』* 💖─╮
+│ ⚠️ *ayy errorcito* 
 │
-│ 🤖 *Responde a un archivo válido*
-│ ⚡ *Formatos:* Imagen, Video, Audio, Doc
-╰─────────────────❒`, m)
+│ 🥺 *Responde a un archivo válido bb*
+│ ✨ *Formatos:* Imagen, Video, Audio, Doc
+╰─────────────────💖`, m)
 
   try {
-    await conn.sendMessage(m.chat, { react: { text: '⏳', key: m.key } })
+    await conn.sendMessage(m.chat, { react: { text: '💕', key: m.key } })
 
     let media = await q.download()
     let link = await myCloud(media)
 
     if (!link.success) throw new Error()
 
-    let txt = `╭─❒ *『 𝗖𝗬𝗕𝗘𝗥 𝗕𝗢𝗧 』* ❒
-│ ☁️ *ARCHIVO SUBIDO A LA NUBE*
+    let txt = `╭─💖 *『 𝗔𝗡𝗧𝗜𝗧𝗢𝗣 𝗕𝗢𝗧 』* 💖─╮
+│ ☁️ *tu archivo ya está en la nube*
 │
-│ 🔗 *Enlace:* ${link.url}
+│ 🔗 *Link:* ${link.url}
 │ 🆔 *ID:* ${link.id}
-│ 📊 *Tamaño:* ${formatBytes(media.length)}
-│ ⚡ *Servidor:* evogb.win
+│ 📊 *Pesito:* ${formatBytes(media.length)}
+│ ⚡ *Server:* evogb.win
 │
-│ > *“Archivo almacenado en el servidor”*
-╰─────────────────❒`
+│ > *“Guardadito con mucho amor en Antitop Bot”* 💋
+╰─────────────────💖`
 
     await conn.sendFile(m.chat, media, 'file.' + link.url.split('.').pop(), txt, m)
-    await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } })
+    await conn.sendMessage(m.chat, { react: { text: '💖', key: m.key } })
   } catch (e) {
     console.error(e)
-    await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } })
-    await conn.reply(m.chat, `╭─❒ *『 𝗖𝗬𝗕𝗘𝗥 𝗕𝗢𝗧 』* ❒
-│ ❌ *ERROR DE SUBIDA*
+    await conn.sendMessage(m.chat, { react: { text: '🥺', key: m.key } })
+    await conn.reply(m.chat, `╭─💖 *『 𝗔𝗡𝗧𝗜𝗧𝗢𝗣 𝗕𝗢𝗧 』* 💖─╮
+│ ❌ *ay no se pudo subir*
 │
-│ ⚡ *No se pudo subir el archivo*
-│ 🤖 *Intenta de nuevo en unos seg*
-╰─────────────────❒`, m)
+│ 😭 *Intenta de nuevo en un ratito*
+│ ✨ *Antitop Bot te cuida*
+╰─────────────────💖`, m)
   }
 }
 
