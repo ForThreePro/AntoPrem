@@ -18,18 +18,18 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isROwner, 
             if (m.text.includes(linkThisGroup)) return !0;
         }
 
-        // AVISO CYBER
+        // AVISO ANTITOP
         await conn.sendMessage(m.chat, { 
             text: `
-╔═══「 🚨 𝐀𝐍𝐓𝐈𝐋𝐈𝐍𝐊 」═══╗
-║
-║ 𝗗𝗘𝗧𝗘𝗖𝗧𝗔𝗗𝗢 : Enlace Prohibido
-║ 𝗨𝗦𝗨𝗔𝗥𝗜𝗢 : ${user}
-║ 𝗘𝗦𝗧𝗔𝗗𝗢 : ⚠️ Eliminando...
-║
-╚═══════════╝
+╭─💖 *『 𝗔𝗡𝗧𝗜𝗟𝗜𝗡𝗞 』* 💖─╮
+│
+│ 🚨 *Detectado:* Enlace prohibido
+│ 👤 *Usuario:* ${user}
+│ ⚠️ *Estado:* Eliminando...
+│
+╰─────────────────💖
 
-> 𝙻𝚘𝚜 𝚎𝚗𝚕𝚊𝚌𝚎𝚜 𝚎𝚜𝚝𝚊𝚗 𝚙𝚛𝚘𝚑𝚒𝚋𝚒𝚍𝚘𝚜
+> *“Los links están prohibidos bb”*
 `.trim(), 
             mentions: [m.sender] 
         }, { quoted: m });
@@ -38,12 +38,12 @@ export async function before(m, { conn, isAdmin, isBotAdmin, isOwner, isROwner, 
         if (!isBotAdmin) {
             return conn.sendMessage(m.chat, { 
                 text: `
-╔═══「 ⚠️ 𝐄𝐑𝐑𝐎𝐑 」═══╗
-║
-║ No tengo permisos para eliminar
-║ Activenme como Admin
-║
-╚═══════════╝
+╭─💖 *『 𝗔𝗗𝗩𝗘𝗥𝗧𝗘𝗡𝗖𝗜𝗔 』* 💖─╮
+│
+│ 😿 *ayy no tengo permisos*
+│ ✨ *Actívenme como admin bb*
+│
+╰─────────────────💖
 `.trim(), 
                 mentions: groupAdmins.map(v => v.id) 
             }, { quoted: m });
